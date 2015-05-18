@@ -1,0 +1,43 @@
+%\datum{13. April 2015}
+\section{Die Navier-Stokes-Gleichungen als Modell für inkompressible Strömungen}
+\begin{bemerkung}
+  Grundprinzipien und Variablen
+
+Die Grundgleichungen der Fluiddynamik werden \markdef{Navier-Stokes-Gleichungen} genannt. Im isothermen Fall, das heißt, eine Strömung konstanter Temperatur, betrachten wir zwei physikalische Bilanzgleichungen: die Masseerhalung und die Impulsbilanz /Impulserhaltung. Es gibt verschiedene Wege, diese Gleichungen herzuleiten. Im Folgenden wird ein klassischer Zugang aus der Kontinuumsmechanik präsentiert. In der Herleitung sind einige Schritte phänomenologisch/heuristisch begründet. 
+
+Die Strömung wird durch folgende Variablen beschrieben:
+\begin{itemize}
+\item $\rho(t, x)$: Dichte [kg/m$^{3}$]
+\item $v(t, x)$: Geschwindigkeit [m/s]
+\item $p(t, x)$: Druck [Pascal: Pa = N/m$^{2}$].
+\end{itemize}
+Diese werden als genügend glatte Funktionen angenommen. Das \markdef{Gebiet} wird $\Omega \subset \R^{3}$ genannt. Die zeitliche Evolution wird im Zeitintervall $[0, T]$ modelliert. 
+\end{bemerkung}
+
+\subsection{Die Massenerhaltung}
+\begin{bemerkung} Ein Erhaltungssatz
+
+Sei $\omega$ ein beliebiges, offenes Teilgebiet von $\Omega$ mit genügend glatter Oberfläche $\partial \omega$, das konstant in der Zeit ist. Dann ist die Gesamtmasse in $\omega$ gegeben durch
+\begin{align*}
+  m(t) = \int_{\omega}\rho(t, x) \,dx
+\end{align*}
+(in [kg]).
+
+Wenn die Masse in der zeitlichen Evolution in $\omega$ erhalten bleibt, so muss die zeitliche Rate der Massenänderung mit dem Massenfluss $\rho v(t, x)$ [kg/m$^{3}$s] über die Oberfläche von $\partial \omega$ übereinstimmen. Das heißt, die Änderung der Masse beträgt
+\begin{align}\label{eq:mass_deriv}
+  \frac{d}{dt} m(t) = \frac d {dt} \int_{\omega} \rho(t, x) dx = - \int_{\pd \omega} \rho v(t, x) \cdot n \,ds,
+\end{align}
+wobei $n(s)$ eine äußere Einheitsnormale bei $s \in \pd \omega$ ist. Da alle Funktionen als genügend glatt angenommen werden, kann der Gauß'sche Satz angewendet werden. 
+
+Mit \eqref{eq:mass_deriv} führt dies auf
+\begin{align*}
+  \int_{\omega} \pd_{t}\rho(t, x) + \nabla\cdot(\rho v)\,dx = 0. 
+\end{align*}
+Da $\omega$ ein beliebiges Kontrollvolumen ist, folgt
+\begin{align*}
+  \pd_{t} \rho + \nabla \cdot(\rho v) = 0, \qquad \forall t \in [0, T], \, x \in \Omega
+\end{align*}
+(schöne Integralgleichung).
+Diese Erhaltungsgleichung ist die erste Grundgleichung der Fluiddynamik., die (Massen-)Kontinuitätsgleichung.  
+\end{bemerkung}
+

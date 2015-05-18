@@ -1,0 +1,404 @@
+\section{Funktionalanalysis für die inkompressible Navier-Stokes-Gleichung, elementare Einblicke}
+\label{sec:funkt-fur-die}
+
+\begin{bemerkung}
+  Dieses Kapitel behandelt die erste Schwierigkeit, die die inkompressible NSG aufweisen, nämlich die Koppelung von Geschwindigkeit und Druck. Charakteristische Eigenschaft dafür ist das Fehlen eines Druckbeitrages in der Massenerhaltung. Die Massenerhaltung ist eine geometrische Zwangsbedingung an die Geschwindigkeit und der \emph{Druck in der Impulsgleichung ist der zugehörige Lagrange-Multiplikator}!  Diese Art der Koppelung nennt man Sattelpunktproblem. Alle Modelle (imkompressible Navier-Stokes-Gleichung, Stokes-Gleichung, imkompressible Oseengleichung) weisen dieselbe Art der Druck-Geschwindigkeits-Kopplung auf.
+
+Die Theorie der linearen Sattelpunktprobleme wird hier elementar präsentiert. Wir werden Begriffe einführen wie
+\begin{itemize}
+\item inf-sup-Stabilität, Divergenzstabilität, Sattelpunktproblem
+\item geeignete Funktionenräume für das Stokes-Problem
+\item geeignete Finite-Elemente-Räume-Kombinationen (Druck-Geschwindigkeit); Divergenzstabilität entspricht hier der diskretem inf-sup-Stabilität
+\end{itemize}
+\end{bemerkung}
+\subsection{Ein konkretes Sattelpunktproblem}
+\label{sec:ein-konkr-satt}
+
+Stokes:
+\begin{align*}
+  - \Delta u + \nabla p &= f \\
+  - \nabla \cdot u &= 0
+\end{align*}
+ist 'gleichschwierig' wie
+\begin{align*}
+  - \Delta u + \nabla p &= f \\
+  - \nabla \cdot u &= g
+\end{align*}
+Diskretisierung:
+\begin{align*}\underbrace{
+  \begin{pmatrix}
+  A &B^{T} \\ B & 0   
+  \end{pmatrix}}_{K}
+  \begin{pmatrix}
+    u\\ p
+  \end{pmatrix}
+=
+\begin{pmatrix}
+  f\\g
+\end{pmatrix} 
+\end{align*}
+mit einer symmetrischen, aber nicht positiv definiten Systemmatrix. Seien eine invertierbare $n_{v} \times n_{v}$-Matrix $A$ und eine $n_{p} \times n_{v}$-Matrix $B$ mit $\rg (B) = n_{p}$ gegeben. Wir stellen uns die Frage, ob die Gleichung
+\begin{align*}
+  K  \begin{pmatrix}
+    u\\ p
+  \end{pmatrix}
+=
+\begin{pmatrix}
+  f\\g
+\end{pmatrix} 
+\end{align*}
+eine eindeutige Lösung hat.
+\begin{align*}
+  A u + B^{T}p &= f \\
+Bu &= g
+\end{align*}
+Aus der ersten Gleichung folgt
+\begin{align*}
+  Au = f-B^{T}p, \, u= A^{-1}(f -B^{T}p)
+\end{align*}
+und aus der zweiten mit dieser
+\begin{align*}
+&  g = Bu = B(A^{-1}(f- B^{T}p)) = BA^{-1}f - \underbrace{BA^{-1}B^{T}}_{S, \text{ Schurkomplement}}p\\
+\iff& Sp = BA^{-1}f-g
+\end{align*}
+$S$ ist eine $n_{p} \times n_{p}$-Matrix. $B$ ist eine $n_{p} \times n_{v}$-Matrix. Eine notwendige Bedingung ist, dass $B$ nur dann vollen Rang haben kann, wenn $n_{p}\leq n_{v}$.
+
+Wenn $B$ vollen Rang hat, dann ist auch $B^{T}p$ injektiv. $K$ ist also genau dann invertierbar, wenn $B$ vollen Rang hat. Aus $\rg (B) = n_{p}$ folgt $S = BA^{-1}B^{T}$ ist injektiv, und da $S$ eine $n_{p} \times n_{p}$-Matrix ist, ist $S$ auch bijektiv.
+\begin{align*}
+  p &= S^{-1}(BA^{-1}f-g)\\
+  u &= A^{-1}(f - B^{T}S^{-1}(BA^{-1}f-g))\\
+  \begin{pmatrix}
+    u\\p
+  \end{pmatrix}
+&=\underbrace{
+\begin{pmatrix}
+   A^{-1}(I_{v} - B^{T}S^{-1}(BA^{-1}) & A^{-1}B^{T}S^{-1}\\
+S^{-1}BA^{-1}& -S^{-1}
+\end{pmatrix}}_{K^{-1}}
+\begin{pmatrix}
+  f\\g
+\end{pmatrix}
+\end{align*}
+Entscheidend für die Lösbarkeit des Sattelpunktproblems sind:
+\begin{itemize}
+\item $A$ ist invertierbar
+\item $\rg (B) = n_{p}$
+\end{itemize}
+'Zu jedem $g$ muss man ein $u$ finden können.'
+
+%\datum{04. Mai 2015}
+
+Sei $K =
+\begin{pmatrix}
+  A & B^{T}\\ B & 0
+\end{pmatrix}
+$, $A: n_{\nu} \times n_{\nu}$ invertierbar, $B: n_{p} \times n_{\nu}$ hat vollen Rang, $n_{p}\leq n_{\nu}$, $S = BA^{-1}B^{T}$ bijektiv, $B^{T}$ injektiv. Zu zeigen: $S$ ist injektiv, also $\Ker(Sp) = \set 0$. Angenommen, es sei $\Ker(Sp) \neq 0$. Dann gibt es ein $q \in \R^{n_{p}}$ mit $q \neq 0$ und es gilt:
+\begin{align*}
+&  Sq = BA^{-1}B^{T}q = 0 \implies q^{T}Sq = 0\\
+&q^{T}BA^{-1}B^{T}q = v^{T}A^{-1}v = 0 \implies v = 0\\
+&\implies q = 0
+\end{align*}
+mit $v = B^{Tq}$
+Also ist $S$ bijektiv. 
+
+Entscheidend für die Lösbarkeit des Sattelpunktproblems
+\begin{align*}
+  K
+  \begin{pmatrix}
+    u\\p
+  \end{pmatrix}
+=
+\begin{pmatrix}
+  f\\g
+\end{pmatrix}
+\end{align*}
+ist, dass $A$ invertierbar ist und $\rg(B) = n_{p}$ gilt.
+\begin{bemerkung*}
+  Dies sind hinreichende Bedingungen, die bei den Navier-Stokes-Gleichungen immer erfüllt sind. Von besonderer Bedeutung ist
+  \begin{align*}
+    \rg(B) = n_{p}
+  \end{align*}
+Dies bedeutet insbesondere, dass für alle $q \in \R^{n_{p}}$ ein $v_{q} \in \R^{n_{\nu}}$ existiert, sodass $B$ surjektiv ist, also
+\begin{align*}
+  Bv_{q} = q.
+\end{align*}
+Diese Bedingung ist äquivalent zu der folgenden \markdef{inf-sup-Bedingung}:
+\begin{align}\label{eq:infsup}
+  \inf_{0 \neq q \in \R^{n_{p}}} \sup_{ 0 \neq v \in \R^{n_{v}}} \frac {q^{T}Bv}{\nnorm v_{2} \cdot \nnorm q_{2}}\geq \beta > 0.
+\end{align}
+\end{bemerkung*}
+\begin{beweis}der Äquivalenz:
+
+  \begin{enumerate}
+  \item Angenommen, es gilt \eqref{eq:infsup} und $\rg(B) < n_{p}$. Dann gibt es einen Vektor $q \in \R^{n_{p}}$, $q \neq 0$ mit $B^{T}q = 0$, $0 \neq q \in \Ker(B^{T})$. Dann gilt für alle $v \in \R^{n_{\nu}}$ $ 0= v^{T}B^{T}q = q^{T}Bv$, also ist $\beta = 0$. Widerspruch. 
+\item Es gelte nun $\rg(B) = n_{p}$. Für alle $q \in \R^{n_{p}}$, $q \neq 0$ gilt $B^{T}q \neq 0$ mit $B^{T}q \in \R^{n_{\nu}}$. Wähle nun $v = B^{T}q$:
+  \begin{align*}
+    \inf_{0 \neq q \in \R^{n_{p}}} \sup_{ 0 \neq v \in \R^{n_{\nu}}} \frac {v^{T}Bq}{\nnorm v_{2} \cdot \nnorm q_{2}}&\geq \inf_{0 \neq q \in \R^{n_{p}}} \frac {q^{T}BB^{T}q}{\nnorm {B^{T}q}_{2} \cdot \nnorm q_{2}}\\
+&= \inf_{0 \neq q \in \R^{n_{p}}} \frac {\nnorm{B^{T}q}_{2}}{\nnorm q_{2}} \geq \sqrt{\lambda_{\min}(BB^{T})} > 0.
+  \end{align*}
+Der Ausdruck $\frac {\nnorm{B^{T}q}^{2}_{2}}{\nnorm q^{2}_{2}} = \frac{q^{T}BB^{T}q}{q^{T}q}$ ist der Rayleighquotient von $BB^{T}$ und es gilt
+\begin{align*}
+  \inf_{0 \neq q \in \R^{n_{p}}} \frac {q^{T}BB^{T}q}{q^{T}q} = \lambda_{\min}(BB^{T}).
+\end{align*}
+Falls $\lambda_{\min}(BB^{T}) = 0$ gilt, so gibt es ein $q \neq 0$, $q \in \R^{n_{p}}$, sodass $BB^{T}q = 0$. Ferner
+\begin{align*}
+  0 = q^{T}BB^{T}q = (B^{T}q)^{T}\cdot(B^{T}q), 
+\end{align*}
+also ist $q = 0$, da $B^{T}$ injektiv ist. Widerspruch! Also $\lambda_{\min}> 0$. 
+  \end{enumerate}  
+\end{beweis}
+
+\subsection{Funktionenräume für stationäre, inkompressible Stokes-Probleme }
+\label{sec:funkt-fur-stat}
+
+Das imkompressible Stokes-Problem
+\begin{align}\label{eq:stokes}
+  - \Delta u + \nabla p & = f, \quad x \in \Omega\\
+\nabla \cdot u  &= 0, \quad x \in \Omega\\
+u &= 0, \quad x \in \Omega
+\end{align}
+besitzt die folgende (formale) schwache Formulierung
+\begin{align}\label{eq:stokes_weak}
+  \int_{\Omega} \nabla u : \nabla w dx - \int_{\Omega} p \cdot \nabla \cdot w dx &= \int_{\Omega} f \cdot w dx \quad \forall w \in C_{0}^{\infty}(\Omega)^{d}\\
+- \int_{\Omega} q \nabla\cdot n dx& = 0\quad \forall q \in C_{0}^{\infty}(\Omega).
+\end{align}
+Dazu benötigt man die Übungsaufgabe 1.1, Integration üver $\Omega$ und Übungsaufgabe 1.3.
+
+Mit Einführung der Bilinearformen
+\begin{align*}
+  a(u, v) &\coloneqq \int_{\Omega} \nabla u : \nabla v dx\\
+  b(u, q) &\coloneqq -\int_{\Omega} (\nabla \cdot u) q dx
+\end{align*}
+und der Linearform
+\begin{align*}
+  l(v) \coloneqq \int_{\Omega} f\cdot v dx
+\end{align*}
+ergibt sich formal
+\begin{align}\label{eq:bilinearform}
+  a(u, w) + b(w, p) &= l(w), \quad \forall w \in C_{0}^{\infty}(\Omega)^{d}\\
+b(u, q) &= 0, \quad \forall q \in C_{0}^{\infty}(\Omega)
+\end{align}
+\begin{bemerkung*}
+  Funktionenräume für Geschwindigkeit und Druck im Fall homogener Dirichlet-Randbedingungen
+
+Sei $\Omega$ ein beschränktes und zusammenhängendes Gebiet in $\R^{d}$, $d \in \set{2, 3}$, und sei $\pd \Omega$ Lipschitz-stetig. Zur Vereinfachung der Situation werden nur Dirichlet-Randbedingungen behandelt. Diese wesentlichen Randbedingungen führen zur Definition des Geschwindigkeitsraumes
+\begin{align*}
+  V = H_{0}^{1}(\Omega)^{d} = \set{v \in H^{1}(\Omega)^{d}: \, v = 0 \text{ auf } \Gamma}, 
+\end{align*}
+wobei die Randwerte im Spursinn zu verstehen sind. 
+
+Der Druckraum ist gegeben durch
+\begin{align*}
+  Q = L_{0}^{2}(\Omega) = \set{q \in L^{2}: \, \int_{\Omega} q(x) dx = 0}.
+\end{align*}
+Beide Räume sind Hilberträume. Das innere Produkt und die induzierte Norm von $V$ ist gegeben durch
+\begin{align}\label{eq:norm_prod_v}
+  (v, w)_{V} &= \int_{\Omega} \nabla v: \nabla w dx, \notag \\
+\nnorm v_{V} &= \nnorm{\nabla v}_{L^{2}}
+\end{align}
+Die Poincare-Ungleichung zeigt, dass \eqref{eq:norm_prod_v} wirklich eine Norm und $(v, w)_{V}$ ein Skalarprodukt ist. 
+\end{bemerkung*}
+Das innere Produkt und die induzierte Norm in $Q$ sind gegeben durch
+\begin{align*}
+  (q, v)_{Q} = \int_{\Omega} q(x) \cdot v(x) dx, \quad \nnorm q_{Q} = \nnorm q_{L^{2}(\Omega)}
+\end{align*}
+Der Dualraum von $V$ ist $V' = (H^{-1})(\Omega)^{d}$, und der Dualraum des Druckes ist $Q' = Q$. Für $v \in V$ folgt $\nabla v$ in $L^2(\Omega)^{d \times d}$ und mit der Übungsaufgabe 1.4 gilt
+\begin{align*}
+  \nabla \cdot v \in L^{2}(\Omega) 
+\end{align*}
+für $v \in H^{1}(\Omega)^{d}$. Weiter gilt noch für $v \in H_{0}^{1}(\Omega)^{d}$:
+\begin{align*}
+  &\int_{\Omega}\nabla\cdot v = \int_{\Omega}v \cdot n dS = 0\\
+\implies & \nabla\cdot v \in Q = L_{0}^{2}(\Omega). 
+\end{align*}
+Somit sind $a: V \times V \to \R$, $b: V \times Q \to \R$ zwei wohldefinierte Bilinearformen mit
+\begin{align*}
+  a(u, v) &= \int_{\Omega}\nabla u: \nabla v dx, \\
+  b(u, q) &= -\int_{\Omega}(\nabla\cdot u)q dx.
+\end{align*}
+\begin{bemerkung*}
+  Aus der obigen Überlegung folgt:
+  \begin{align*}
+    \div: V \to Q, \quad v \mapsto \nabla\cdot v
+  \end{align*}
+ist ein linearer, beschränkter Operator, der $V$ in $Q$ abbildet. 
+
+Er ist linear, außerdem gilt
+\begin{align*}
+  v \in V \implies \nnorm{\div v} _{Q} = \nnorm{\nabla\cdot v}_{L^{2}} \leq \nnorm{\nabla v}_{L^{2}} = \nnorm v_{V}
+\end{align*}
+und schließlich
+\begin{align*}
+  \int_{\Omega} \nabla\cdot v dx = \int_{\Omega} v \cdot n dS = 0 \implies \nabla\cdot v \in Q.
+\end{align*}
+\end{bemerkung*}
+\begin{definition*}
+  Distributionelle und schwache Divergenz
+
+Für ein Vektorfeld $v \in L^{2}(\Omega)^{d}$ wird die Abbildung
+\begin{align*}
+  C_{0}^{\infty} \to \R \text{ mit } \psi \mapsto - \int_{\Omega} \nabla \psi \cdot v dx
+\end{align*}
+die distributionelle Divergenz von $v$ genannt. Falls für ein Vektorfeld $v \in L^{p}(\Omega)^{d}$ mit $p\geq 1$ eine Funktion $\theta \in L_{loc}^{1}(\Omega)$ existiert mit
+\begin{align*}
+  - \int_{\Omega}\nabla \psi \cdot v dx = \int_{\Omega} \psi \cdot \theta dx \qquad \forall \theta \in C_{0}^{\infty}(\Omega), 
+\end{align*}
+so wird $\theta$ die schwache Divergenz von $v$ genannt. (Insbesondere wurden anfangs keine Glattheitsbedingungen an $\psi$ gestellt!)
+\end{definition*}
+%\datum{11. Mai 2015}
+\begin{bemerkung}
+  Der Funktionenraum der Funktionen mit schwacher Divergenz in $L^{2}$
+
+Für inkompressible Strömungen ist der Raum der Vektorfelder $L^{2}(\Omega)^{d}$ mit schwacher Divergenz in $L^{2}$ wichtig:
+\begin{align*}
+  H(\div,\Omega) \coloneqq \set{v \in L^{2}: \, \nabla \cdot v \in L^{2}(\Omega)}. 
+\end{align*}
+(Es existiert obiges $\theta$!) Dieser Raum ist ein Hilbertraum mit Skalarprodukt
+\begin{align*}
+  (u, v)_{H(\div, \Omega)} = \int_{\Omega}(u\cdot v + (\nabla \cdot u)\cdot(\nabla\cdot v)) dx.
+\end{align*}
+\end{bemerkung}
+\begin{definition}
+  Divergenzfreies Vektorfeld in $L^{2}(\Omega)^{d}$
+
+Im Sinne der Definition 2.1 wird ein Vektorfeld $v \in L^{p}(\Omega)^{d}$, $p\geq 1$ \markdef{schwach divergenzfrei} genannt, falls für alle $\psi \in C_{0}^{\infty}(\Omega)$: 
+\begin{align*}
+  \int_{\Omega}\nabla\psi \cdot v dx = 0
+\end{align*}
+('$v$ ist orthogonal zu allen Gradienten', ganz wichtig!).
+
+Damit wird der folgende Raum einführbar:
+\begin{align*}
+  H_{\div}(\Omega) = \set{v \in L^{2}: \, \nabla \cdot v \in L^{2}, \nabla\cdot v \,\wedge = v \cdot n = 0 \text{ auf }\Gamma}. 
+\end{align*}
+Die Spur der Normalkomponenten von schwach divergenzbehafteten Vektorfeldern liegt in $H^{- \frac{1}{2}}(\Omega)$
+
+Ein weiterer wichtiger Raum ist
+\begin{align*}
+  V_{0} = V_{\div} = \set{v \in V: \nabla \cdot v = 0}.
+\end{align*}
+Weiterhin wird eingeführt: $V^{\perp} = \set{v \in V: (v, w)_{V} = 0\, \forall w \in V_{0}} = \set{v \in V: \int_{\Omega} \nabla v: \nabla w dx = 0, \forall w \in V_{0}}$
+\end{definition}
+\begin{lemma}Wichtige Aussage:
+
+  Sei $\phi \in H^{1}(\Omega)^{d}$. Dann gilt:
+  \begin{align*}
+    \nabla \cdot (\nabla \times \phi) = 0
+  \end{align*}
+im schwachen Sinn.
+\end{lemma}
+\begin{beweis}
+  Sei $\phi \in H^{1}(\Omega)^{d}$. Dann existieren $\phi_{i} \in C^{\infty}(\Omega)^{d}$ mit $\phi_{i} \to \phi$ in $(H^{1})^{d}$. Daraus folgt
+  \begin{align*}
+    \nabla \times \phi_{i} \to \nabla \times \phi. 
+  \end{align*}
+Weiter gilt für alle $w \in C_{0}^{\infty}(\Omega)$:
+\begin{align*}
+  - \int_{\Omega} \nabla w \cdot (\nabla \times \phi_{i}) dx \to   - \int_{\Omega} \nabla w \cdot (\nabla \times \phi) dx.
+\end{align*}
+Mittels partieller Integration erhalten wir
+\begin{align*}
+  \int_{\Omega} \omega \cdot \nabla \cdot(\nabla \times \phi_{i}) dx .
+\end{align*}
+(Nachrechnen! $(\nabla \times \phi_{i}) = 0$ für glattes $\phi_{i}$)
+\end{beweis}
+\begin{satz}
+  Sei $\Omega$ ein beschränktes Gebiet, dessen Rand Lipschitz-stetig ist. Dann exisitert zu jedem $q \in L_{0}^{2}(\Omega)$ ein $v \in H_{0}^{1}(\Omega)$ mit
+  \begin{align*}
+    \nabla \cdot v = q \quad \wedge \quad  \nnorm {\nabla v}_{L^{2}} = \nnorm v_{V} \leq C_{\beta}\cdot \nnorm  q_{Q}. 
+  \end{align*}
+Die zweite Aussage nennt man \markdef{Divergenzstabilität}. 
+\end{satz}
+\begin{beweis}
+  Die einzige Schwierigkeit: $H^{1}_{\mathbf{0}}$ (sonst 'einfache Aufgabe'). Hier nur eine Skizze, für den vollständigen Beweis benötigt man weitere Räume etc. Wir nehmen an, dass $\Omega \subset \R^{2}$ ($d = 3$ ähnlich) und entweder konvex oder glatt im Sinne $\pd \Omega \subset C^{2}$. man löst zunächst das folgende Problem im schwachen Sinn (d.h. in $H^{1}(\Omega)$):
+  \begin{align*}
+     \nabla \cdot (- \nabla \psi) = q, \quad \nabla \psi \cdot n = 0
+  \end{align*}
+ in $\pd \Omega$. Die schwache Formulierung hierzu lautet:
+ \begin{align*}
+   \int_{\Omega} \nabla \cdot (- \nabla \psi)wdx =& \int_{\Omega} q\cdot w dx, \quad \forall w \in C^{\infty}(\Omega)\\
+\iff \int_{\Omega} \nabla \cdot ( w(-\nabla \psi)) + \nabla \psi \cdot \nabla wdx =& \int_{\Omega} q\cdot w dx\\
+=& \int_{\pd \Omega}w (- \nabla \psi)\cdot n dS + \int_{\Omega}\nabla \psi \cdot \nabla w dx. 
+ \end{align*}
+Aufgrund der Randbedingung haben wir für alle $x \in C^{\infty}(\Omega)$:
+\begin{align*}
+  \int_{\Omega}\nabla \psi \nabla w  dx = \int_{\Omega} q \cdot w dx
+\end{align*}
+Neumann-Problem erfordert Kompatibilitätsbedingung
+\begin{align*}
+  \int_{\Omega} q \,dx = \int_{\Omega} \nabla \psi \cdot n \, dS = 0, 
+\end{align*}
+die erfüllt ist. Also gibt es ein $\psi \in H^{1}$, das dieses Problem erfüllt. Aufgrund der Anforderungen an $\pd \Omega$ (Glattheit des Randes oder Konvexität) folgt sogar $\psi \in H^{2}(\Omega)$ (Konvexität liefert Differenzierbarkeit, $H(\div) \cap H(curl)$ ist fast $L^{1}$, Maxwell-Gleichungen, sowas). Wir erhalten
+\begin{align*}
+ v =   - \nabla \psi \in H^{1}, \quad \nabla\cdot(- \nabla \psi) = g. 
+\end{align*}
+Weiter ist $\nabla \psi \cdot n = 0$, das heißt $v \cdot n = 0$.  Weiter gilt
+\begin{align*}
+\nnorm v_{V} =   \nnorm{\nabla \psi}_{V} = \nnorm \psi_{ H^{2}} \leq C_{\Omega} \cdot \nnorm{q}_{N^{2}}. 
+\end{align*}
+Für $v = - \nabla \psi$ stimmt im Allgemeinen $v\cdot t = 0$ nicht. Wir wenden einen Spursatz für $H^{2}$-Funktionen an. Es existiert ein $\phi \in H^{2}(\Omega)$ mit $\phi|_{\pd \Omega} = 0$ und $\nabla \phi \cdot n = v \cdot t$ und $\nnorm \phi_{H^{2}}\leq C_{\Omega}' \nnorm v_{V}$ (Biharmonische Gleichungen). Sei $\tilde v = \nabla \times \phi = \nabla \times
+\begin{pmatrix}
+  0\\0\\ \phi
+\end{pmatrix}.
+$ 
+\begin{align*}
+  \begin{pmatrix}
+    \pd_{x} \\    \pd_{y} \\\pd_{z}
+  \end{pmatrix} \times
+  \begin{pmatrix}
+    0\\0\\\phi
+  \end{pmatrix} =
+  \begin{pmatrix}
+    \phi_{y} \\- \phi_{x}\\ 0
+  \end{pmatrix}
+= \begin{pmatrix}
+    \phi_{y} \\- \phi_{x}
+  \end{pmatrix} = 
+- (\nabla \phi)^{\perp}
+\end{align*}
+mit
+\begin{align*}
+  \begin{pmatrix}
+    v_{1} \\v_{2}
+  \end{pmatrix}^{\perp}
+=
+\begin{pmatrix}
+  - v_{2}\\v_{1}
+\end{pmatrix}.
+\end{align*}
+Für $\tilde v$ gilt: $\nabla \cdot \tilde v = 0$. $\tilde v \cdot n = - (\nabla \phi)^{\perp} \cdot n =
+\begin{pmatrix}
+  \phi_{y} & - \phi_{x}
+\end{pmatrix}
+\begin{pmatrix}
+  t_{2}\\- t_{1}
+\end{pmatrix} = \phi_{y} t_{2} + \phi_{x} t_{1} = \nabla \phi \cdot t.
+$
+\begin{align*}
+  \tilde v \cdot t &= (\nabla \phi)^{\perp} \cdot t =
+  \begin{pmatrix}
+    \phi_{y}\\ - \phi_{x}
+  \end{pmatrix}\cdot
+  \begin{pmatrix}
+    t_{1}\\ t_{2}
+  \end{pmatrix} \\
+&=t_{1}\cdot \phi_{y} - \phi_{x}\cdot t_{2}
+= - \nabla \phi \cdot n =  - 
+  \begin{pmatrix}
+    \phi_{x}\\ \phi_{y}
+  \end{pmatrix}
+  \begin{pmatrix}
+    t_{2}\\ - t_{1}
+  \end{pmatrix}\\
+&= v \cdot t\\
+v_{q} &= v + \tilde v \To v_{q}|_{\pd \Omega} = 0
+\end{align*}
+\end{beweis}
+\begin{lemma}Die Abbildung $\div: V^{\perp} \to Q$ ist stetig und bijektiv.
+\end{lemma}
+\begin{beweis}
+  Noch zu zeigen: Injektivität von $\div: V^{\perp} \to Q$. Seien $v_{1}, v_{2} \in V^{\perp}$ mit $\div(v_{1}) = \div(v_{2})$ und $v_{1} \neq v_{2}$. Dann ist $w = v_{1}- v_{2} \in V_{0}$ und $w \in V^{\perp}$. Daraus folgt $w = 0$, Widerspruch! 
+\end{beweis}
+\begin{bemerkung}
+  Mithilfe der Funktionalanalysis sieht man ein, dass die Divergenzstabilität schon aus der Surjektivität und des Divergenzoperators folgt. Nach dem Satz der offenen Abbildung ist die Inverse eines beschränkten bijektiven linearen Operators wieder beschränkt und damit stetig. 
+\end{bemerkung} 
