@@ -402,3 +402,586 @@ v_{q} &= v + \tilde v \To v_{q}|_{\pd \Omega} = 0
 \begin{bemerkung}
   Mithilfe der Funktionalanalysis sieht man ein, dass die Divergenzstabilität schon aus der Surjektivität und des Divergenzoperators folgt. Nach dem Satz der offenen Abbildung ist die Inverse eines beschränkten bijektiven linearen Operators wieder beschränkt und damit stetig. 
 \end{bemerkung} 
+
+%\datum{01. Juni 2015}
+\begin{lemma}
+  Obere Schranke für die inf-sup-Bedingung
+
+Es gilt $\beta \leq 1$. 
+\end{lemma}
+\begin{beweis}
+  \begin{align*}
+    \frac{(\nabla \cdot v, q)}{\nnorm v_{V} \cdot \nnorm q_{Q}} \leq \frac{\nnorm{\nabla \cdot v}_{Q} \cdot \nnorm q_{Q}}{\nnorm{ v}_{Q} \cdot \nnorm q_{Q}} \leq 1. 
+  \end{align*}
+\end{beweis}
+\begin{definition}
+  Klassische \markdef{konforme} gemischte Finite Elemente für das Stokes Problem
+
+Für $V_{h} \subset V$, $q_{h} \subset Q$ ist die FEM-Diskretisierung gegeben durch: Gesucht ist $(u_{h}, p)$ mit 
+\begin{align}\label{eq:disc}
+&  v(\nabla u_{h}, \nabla v_{h}) - (p_{n}, \nabla \cdot v_{h}) = (f, v_{h}), \quad \forall v_{h} \in V_{h}\\
+& - (\nabla \cdot u_{h}, q_{h}) = (g, q_{h}), \quad \forall q_{h} \in q_{h}. 
+\end{align}
+\end{definition}
+\begin{bemerkung}
+  Man führt zunächst den Raum der diskret-divergenzfreien Funktionen ein mit
+  \begin{align*}
+    V_{\div}^{h} = \set{v_{h} \in V_{h}: \, (\nabla\cdot v_{h}, q_{h}) = 0 \; \forall q_{h} \in q_{h}}. 
+  \end{align*}
+Elemente $v_{h} \in V_{\div}^{h}$ sind im Allgemeinen nicht divergenzfrei (nicht einmal im schwachen Sinne), obwohl man in der Literatur oft geschrieben sieht, dass dies eine schwache Vorschreibung der Divergenzfreiheit sei. 
+
+In der Tat ist dies jedoch eine diskrete Divergenzfreiheit. Ein Element $v_{h} \in V_{\div}^{h}$ ist diskret divergenzfrei, falls
+\begin{align*}
+  \P_{n}^{q_{h}}(\nabla \cdot v_{h}) = 0
+\end{align*}
+gilt. Hier ist $\Pi_{n}^{Q_{h}}$ der $L^{2}$-Projektor auf den diskreten Druckraum. 
+Die Qualität des diskreten Divergenzbegriffes ist also relativ zum diskreten Druckraum zu betrachten. Der diskrete Druckraum ist definiert als
+\begin{align*}
+  \div_{h} : V_{h} \to Q_{h}\\
+v_{h} \mapsto \Pi_{n}^{Q} (\nabla \cdot v_{h})
+\end{align*}
+für alle $v_{h} \in V_{h}$. 
+\end{bemerkung}
+\begin{bemerkung}
+  Der diskreten inf-sup-Bedingung kommen zwei wesentliche Bedingungen hinzu:
+  \begin{enumerate}
+  \item Der diskrete Divergonzoperator $\div_{h}: V_{h} \to q_{h}$ ist surjektiv. Dies garantiert, dass das diskrete Problem \eqref{eq:disc} überhaupt eindeutig lösbar ist. Mehrdeutigkeiten können im Druck entstehen (Druckmodem?). Dies sind diskrete Drücke, sodass
+    \begin{align*}
+      (q_{h}, \nabla \cdot v_{h}) = 0, \quad \forall v_{h} \in V_{h}
+    \end{align*}
+gilt. Hierfür reicht:
+\begin{align}\label{eq:infsup_disc_sim}
+  \inf_{0 \neq q_{h} \in q_{h}} \sup_{0 \neq v_{h} \in V_{h}}\frac{(\nabla \cdot v_{n}, q_{h})}{\nnorm{v_{h}}_{V}\cdot \nnorm{q_{h}}_{Q}} > 0, \quad \forall h > 0.
+\end{align}
+\item Die diskrete inf-sup-Bedingung
+  \begin{align}\label{eq:infsup_disc}
+      \inf_{0 \neq q_{h} \in q_{h}} \sup_{0 \neq v_{h} \in V_{h}}\frac{(\nabla \cdot v_{n}, q_{h})}{\nnorm{v_{h}}_{V}\cdot \nnorm{q_{h}}_{Q}} \geq \beta_{h}\geq C > 0
+  \end{align}
+uniform für eine Gittersequenz $h \to 0$
+sichert dagegen, dass der Raum $V_{h}^{\div}$ gewisse optimale Approximationseigenschaften hat. 
+\end{enumerate}
+
+Die notwendigen Approximationseigenschaften sind:
+\begin{enumerate}
+\item Aus $\forall v \in V \cap H^{k-1} (\Omega)^{d}$ folgt:
+    \begin{align*}
+      \exists w_{h} \in V_{h} :&\nnorm{v - v_{h}}_{V} \leq C \cdot h^{k}\norm{v}_{k+1}, 
+      :& \nnorm{v - w_{h}}_{L^{2}} \leq C \cdot h^{k+1}\norm{v}_{k+1}, 
+    \end{align*}
+für $k \geq 1$, 
+\item und aus \eqref{eq:infsup_disc} folgt
+  \begin{align*}
+    \forall v \in V_{\div} \cap H^{k}(\Omega)^{d}: \exists w_{h} \in V_{\div}^{h}: 
+&\nnorm{v - w_{h}}_{V} \leq C \cdot h^{k}\norm{v}_{k+1}, \\
+      :& \nnorm{v - w_{h}}_{L^{2}} \leq C \cdot h^{k+1}\norm{v}_{k+1}, 
+  \end{align*}
+\end{enumerate}
+\end{bemerkung}
+\begin{bemerkung} Der Fortin-Interpolator
+  
+Seien $V_{h} \subset V$, $Q_{h} \subset Q$. Dann erfüllen $V_{h}$ und $Q_{h}$ die diskrete inf-sup-Bedingung genau dann, wenn ein Fortin-Interpolator $\Pi_{f}: V \to V_{h}$ existiert, der folgende Eigenschaften erfüllt:
+\begin{align}\label{eq:fortin}
+  (\nabla\cdot(\Pi_{f} v), q_{h}) = (\nabla \cdot v, q_{h}), \quad \forall q_{h} \in q_{h}, \\
+\nnorm{\Pi_{f} v}_{V} \leq C_{F} \nnorm v_{V}. 
+\end{align}
+\begin{beweis}
+  Angenommen, es gilt \eqref{eq:fortin}. Sei $q_{h} \in q_{h}$ beliebig. Aus $v \in V \implies \Pi_{f} v \in V_{h}$ folgt
+  \begin{align*}
+    \sup_{0 \neq v_{h} \in V_{h}}\frac{(\nabla \cdot v_{n}, q_{h})}{\nnorm{v_{h}}_{V}} &\geq \sup_{0 \neq v \in V}\frac{(\nabla \cdot \Pi_{f}v, q_{h})}{\nnorm{\Pi_{f}v}_{V}}\\
+& =   \sup_{0 \neq v \in V}\frac{(\nabla \cdot v, q_{h})}{\nnorm{\Pi_{f}v}_{V}}\\
+& \geq \frac 1 {C_{F}} \sup_{0 \neq v \in V}\frac{(\nabla \cdot v, q_{h})}{\nnorm{v}_{V}} \geq \frac \beta{C_{F}} \nnorm q_{V}\\
+\implies & \beta_{h} \geq \frac \beta {C_{F}}
+  \end{align*}
+\vspace{5mm}
+Es gelte nun \eqref{eq:infsup_disc} mit einem Wert $\beta_{h} \geq C > 0$ uniform bezüglich der Gitterweite $h$. Sei $v \in V$ gegeben. Dann setzt man $q_{h} \coloneqq \Pi_{h}^{q_{h}} (\nabla \cdot v)$. Aufgrund der diskreten inf-sup-Bedingung existiert ein $v_{h}$ mit
+\begin{align*}
+&  (\nabla \cdot v_{h}, v_{h}) = (q_{h}, r_{n}), \forall r_{n} \in q_{h}, \\
+&\nnorm{v_{h}}_{V} \leq \frac 1 {\beta_{h}} \nnorm{q_{h}}_{Q}
+\end{align*}
+Deshalb gilt weiter
+\begin{align*}
+  \nnorm{v_{h}}_{V} &\leq \frac 1 {\beta_{h}} \nnorm{q_{h}}_{Q}\\
+ &= \frac 1 {\beta_{h}} \nnorm{\Pi_{h}^{q_{h}}(\nabla \cdot v)}_{L^{2}}\\
+& \leq \frac 1{\beta_{h}} \nnorm{\nabla \cdot v}_{L^{2}} \leq \frac 1 {\beta_{h}} \nnorm v_{V}. 
+\end{align*}
+\end{beweis}
+\end{bemerkung}
+\begin{bemerkung*}
+  In gemischter FEM wird oft die Konstante $\frac 1 {\beta_{h}}$ verwendet, wo man eigentlich auch die Konstante $\frac 1{C_{F}}$ verwenden könnte. Die Konstante $\frac 1 {\beta_{h}}$ ist oft sehr pessimistisch. Man beachte, dass die diskrete inf-sup-Konstante umgekehrt proportional zum Längenverhältnis des Gebiets $\Omega$ ist. Deshalb sind klassische gemischte FEM-Abschätzungen, die die inf-sup-Bedingungen enthalten, oft zu pessimistisch auf praxis-relevanten Gebieten, wie bei Kanalströmungen. 
+
+Die inf-sup-Bedingung ist zwingend nur in Fehlerabschätzungen für die $L^{2}$-Norm von $p_{h}$. Im Folgenden werden Abschätzungen mit $\frac 1 {C_{F}}$ soweit möglich vorgezogen. Man beachte, dass es nicht einen einzigen Fortin-Interpolator gibt, sondern dass viele existieren. Die diskrete inf-sup-Bedingung garantiert, dass mindestens einer existiert.  
+\end{bemerkung*}
+\begin{lemma}
+  Erfüllen die FEM-Räume $V_{h} \subset V$, $Q_{h}\subset Q$ die diskrete inf-sup-Bedingung \eqref{eq:infsup_disc}, dann gilt für alle $w \in V$ mit
+  \begin{align*}
+    w \in V_{\div}(g) = \set{v \in V: \, - \nabla \cdot v = g \in L_{0}^{2}(\Omega)}, 
+  \end{align*}
+dass
+\begin{align*}
+  \inf_{0 \neq w_{h} \in V_{h}, - \div_{h} w_{h} = \Pi_{h}^{q_{h}}(g)} \nnorm{w - w_{h}}_{V} \leq (1 + C_{F}) \inf_{v_{h} \in V_{h}}\nnorm{w - v_{h}}_{V}. 
+\end{align*}
+\begin{beweis}
+  Sei $v_{h} \in V_{h}$ beliebig. Definiere $z_{h} \coloneqq \Pi{f}(w - v_{n}) \in V_{h}$. Aufgrund der Eigenschaften des Fortin-Interpolators gilt
+  \begin{align*}
+    \nnorm{z_{h}}_{V} \leq C_{F}\nnorm {w - v_{h}}_{V} 
+  \end{align*}
+und
+\begin{align*}
+  (\nabla\cdot z_{h}, q_{h}) = (\nabla \cdot (w - v_{h}), q_{h}))
+\end{align*}
+für alle $q_{h} \in Q_{h}$. Weiterhin gilt für $w_{n} \coloneqq z_{h} + v_{h}$:
+\begin{align*}
+  - \div w_{h} = \Pi_{h}^{Q_{h}} g, 
+\end{align*}
+dass
+\begin{align*}
+  (\nabla\cdot w_{h}, q_{h}) = (\nabla\cdot z_{n}, q_{h}) + (\nabla\cdot v_{n},q_{h}) \\
+&= (\nabla\cdot (w-v_{h}), q_{h}) + (\nabla\cdot v_{h}, q_{h})\\
+&= (\nabla\cdot w, q_{h}) \\
+&= - {\Pi_{h}^{Q_{h}} g, q_{h}}
+\end{align*}
+Weiter gilt
+\begin{align*}
+  \nnorm{w- w_{n}}_{V} &\leq \nnorm {w - v_{n}} + \nnorm{v_{n}}_{V}\\
+& \leq (1 + C_{F}) \nnorm{w - v_{n}}_{V}.
+\end{align*}
+\end{beweis}
+\end{lemma}
+%\datum{01. Juni 2015} fehlt!
+%\datum{08. Juni 2015} 
+\begin{bemerkung} %2.23
+  Seien $V_{h}$ und $Q_{h}$ so gewählt, dass $\nabla\cdot [V_{h}] \subset Q_{h}$. Dann gilt  $V_{\div}^{h}\subset V_{\div}$.
+  \begin{beweis}
+    \begin{align*}
+      V_{\div}^{h} = \set{v_{h} \in V_{h}: (\nabla\cdot v_{h}, q_{h}) = 0, \, \forall q_{h} \in Q_{h}}. 
+    \end{align*}
+Aus $\nabla\cdot [V_{h}] \subset Q_{h}$ folgt, dass man in $(\nabla\cdot v_{h}, q_{h})$ die spezielle Testfunktion $q_{h}\coloneqq \nabla\cdot v_{h}$ wählen kann. Daraus erhalten wir
+\begin{align*}
+        V_{\div}^{h} = \set{v_{h} \in V_{h}: (\nabla\cdot v_{h}, \nabla\cdot v_{h}) = 0} = \set{v_{h} \in V_{h}: \nabla\cdot v_{h}= 0}. 
+\end{align*}
+Daraus folgt $V_{\div}^{h}\subset V_{\div}$.
+  \end{beweis}
+Für den diskreten Divergenzoperator $\div_{h}: V_{h} \to Q_{h}$ mit $\div_{h}(v_{h}) = \Pi_{h}^{Q_{h}}(\nabla\cdot v_{h}) = \nabla\cdot v_{h}$ für $\nabla\cdot [V_{h}] \subset Q_{h}$.
+\end{bemerkung}
+\begin{definition}
+  \begin{align*}
+    V_h^{\perp}\coloneqq \set{v_{h} \in V_{h}: (\nabla\cdot v_{h}, \nabla\cdot w_{h}) = 0, \, \forall w_{h} \in V^{h}_{\div}}. 
+  \end{align*}
+\end{definition}
+\begin{lemma}
+  Es gelte die diskrete Inf-Sup-Bedingung \eqref{eq:infsup_disc}. Dann gelten für die eindeutige Lösung des diskreten Problems
+  \begin{align*}
+    \nu(\nabla u_{h}, \nabla v_{h}) - (p_{h}, \nabla\cdot v_{h}) &= (f, v_{h}), \quad v_{h}\in V_{h}, \\
+- (\nabla \cdot u_{h}, q_{h}) &= (g, q_{h}) \quad \forall q_{h}\in Q_{h}
+  \end{align*}
+mit $h \in L^{2}(\Omega)^{d}$, $g \in L_{0}^{2}(\Omega)$ folgende Stabilitätsabschätzungen:
+\begin{enumerate}
+\item $\nabla\cdot [V_{h}] \subset Q_{h} \implies $
+  \begin{align*}
+&    \nnorm{u_{h}}_{V} \geq \frac {Cp} \nu \nnorm{\P(f)}_{L^{2}} + \frac 1 {\beta_{h}}\nnorm{g}_{L^{2}}\\
+&    \nnorm{p_{h}}_{Q} \geq \frac {Cp} {\beta_{h}} \nnorm{f}_{L^{2}} + \frac \nu {\beta^{2}_{h}}\nnorm{g}_{L^{2}}. 
+  \end{align*}
+\item $V\cdot[V_{h}]\not \subset Q_{h} \implies$
+  \begin{align*}
+    &    \nnorm{u_{h}}_{V} \geq \frac {Cp} \nu \nnorm{f}_{L^{2}} + \frac 1 {\beta_{h}}\nnorm{g}_{L^{2}}\\
+    &    \nnorm{p_{h}}_{Q} \geq \frac {Cp} {\beta} \nnorm{f}_{L^{2}} + \frac \nu {\beta^{2}_{h}}\nnorm{g}_{L^{2}}. 
+  \end{align*}
+\end{enumerate}
+\end{lemma}
+\begin{beweis}
+  Man setzt an $u_{h} = u_{h}^{0} + u_{h}^{\perp}$ mit $u_{h}^{0} \in V_{\div}^{h}$, $u_{h}^{\perp}\in V_{h}^{\perp}$. Es gilt
+  \begin{align*}
+    - \div u_{h} = - \div_{h} u_{h}^{\perp} \stackrel != \Pi_{h}^{Q_{h}}(g). 
+  \end{align*}
+  Mit Lemma 2.22 existiert ein $u_{h}^{\perp} \in V_{h}^{\perp}$ mit
+  \begin{align*}
+    \nnorm{u_{h}^{\perp}}_{V} \leq \frac 1 {\beta_{h}}\nnorm{\Pi_{h}^{Q_{h}}g}_{Q} \leq \frac 1 {\beta_{h}} \nnorm{g}_{Q}. 
+  \end{align*}
+  Testen mit $u_{h}^{0}$ ergibt
+  \begin{align*}
+    &  \nu(\nabla \underbrace{u_{h}}_{u_{h} = u_{h}^{0} + u_{h}^{\perp}}, \nabla u_{h}^{0}) - \underbrace{(p_{h}, \nabla\cdot u_{h}^{0})}_{= 0} = (f, u_{h}^{0}) \iff\\
+    & \nu\nnorm{\nabla u_{h}^{0}}^{2} = (f, u_{h}^{0}). 
+  \end{align*}
+  \begin{enumerate}
+  \item Sei $\nabla\cdot [V_{h}]\subset Q_{h}$, dann gilt $\nabla\cdot u_{h}^{0} = 0$ und daraus folgt
+    \begin{align*}
+      \nu \nnorm{\nabla u_{h}^{0}}^{2} &= (\P(f), u_{h}^{0})\\
+      \implies \nu \nnorm{\nabla u_{h}^{0}}^{2} &\leq C_{p}\nnorm{\P(f)}_{L^{2}} \cdot \nnorm{u_{h}^{0}}_{V}\\
+      \implies \nnorm{\nabla u_{h}^{0}} &\leq \frac{C_{p}}\nu \nnorm{\P(f)}_{L^{2}}
+    \end{align*}
+    Die Dreiecksungleichung liefert die Abschätzung für $u_{h} = u_{h}^{0} + u_{h}^{\perp}$. Im Fall $[\nabla\cdot V_{h}]\not \subset Q_{h}$ ist $\P(f)$ in der Abschätzung durch $f$ zu ersetzen, da $\norm{(f, u_{h}^{0})}$ nur durch $\nnorm f_{L^{2}} \cdot \nnorm{u_{h}^{0}}_{L^{2}}$ abgeschätzt werden kann. 
+\end{enumerate}
+  \end{beweis}
+  \paragraph{Druckabschätzung: } Testen mit beliebigen $w_{h} \in
+  V_{h}^{\perp}$ ergibt
+  \begin{align*}
+    (p_{h}, \nabla\cdot w_{h}) &= \nu(\nabla u_{h}, \nabla w_{h})-(f, w_{h})\\
+    &=  \nu(\nabla u_{h}^{\perp}, \nabla w_{h})-(f, w_{h})\\
+    &\leq \nnorm{\nabla u_{h}^{\perp}}_{L^{2}} \nnorm{\nabla
+      w_{h}}_{L^{2}} + C_{p} \nnorm{f}_{L^{2}} \cdot\nnorm{\nabla
+      w_{h}}_{L^{2}}.
+  \end{align*}
+  Setze $w_{h} \in V_{h}^{\perp}$ so, dass gilt:
+  \begin{align*}
+    &  \nabla\cdot w_{h} = p_{h}, \quad \nnorm{\nabla w_{h}}_{L^{2}} \leq \frac 1 {\beta_{h}} \nnorm{p_{h}}_{Q}\\
+    \implies & \nnorm{p_{h}}^{2}_{Q} \leq \frac 1 {\beta_{h}} \nnorm{\nabla u_{h}^{\perp}}_{L^{2}} \cdot\nnorm{p_{h}}_{Q} + \frac {C_{p}}{\beta_{h}} \nnorm{f}_{L^{2}} \cdot\nnorm{p_{h}}_{L^{2}}\\
+    \implies & \nnorm{p_{h}}_{Q} \leq \frac \nu {\beta_{h}^{2}}
+    \nnorm{g}_{Q} + \frac {C_{p}}{\beta_{h}} \nnorm{f}_{L^{2}}.
+  \end{align*}
+
+  \begin{definition} Für $g \in L_{0}^{2} (\Omega)$ ist
+    \begin{align*}
+      V_{\div}^{h}(g) = \set{v_{h} \in V_{h}: \, \div_{h} v_{h} =
+        \Pi_{h}^{div}g}.
+    \end{align*}
+  \end{definition}
+  \begin{lemma}\label{lem:2-27}
+    Es gelte wieder \eqref{eq:infsup_disc} (diskrete
+    Inf-Sup-Bedingung). Seien $(u_{h}, p_{h}) \in V_{h} \times Q_{h}$
+    die eindeutige Lösung des diskreten Problems für $f\in
+    L^{2}(\Omega)^{d}, g \in L_{0}^{2}(\Omega)$,
+    \begin{align*}
+      \nu(\nabla u_{h}, \nabla v_{h}) &- (p_{h}, \nabla\cdot v_{h}) = (f, v_{h}), \quad \forall v_{h} \in V_{h}\\
+      &- (\nabla\cdot u_{h},q_{h}) = (g, q_{h}), \quad \forall q_{h}
+      \in Q_{h}.
+    \end{align*}
+    Dann gelten:
+    \begin{enumerate}
+    \item $\nnorm{u - u_{h}}_{V} \leq 2 \inf_{w_{h} \in
+        V_{\div}^{h}(g)} \nnorm{u - w_{h}}_{V} + \frac 1 \nu
+      \inf_{q_{h} \in Q_{h}}\nnorm{p - q_{h}}_{Q}$,
+    \item $\nnorm{p - p_{h}}_{Q} \leq (1 + \frac 1 {\beta_{h}})
+      \inf_{q_{h} \in Q_{h}} \nnorm{p - q_{h}}_{Q} + \frac \nu
+      {\beta_{h}} \nnorm{u - u_{h}}_{V}$,
+    \item $\nnorm{u - u_{h}}_{V} \leq 2 (1 + C_{F}) \inf_{w_{h} \in
+        V_{h}} \nnorm{u - w_{h}}_{V} + \frac 1 \nu \inf_{q_{h} \in
+        Q_{h}}\nnorm{p - q_{h}}_{Q}$.
+    \end{enumerate}
+  \end{lemma}
+  \begin{beweis}
+    \begin{enumerate}
+    \item Wegen $u_{h} \in V_{\div}^{h}(g)$ folgt für alle $w_{h} \in
+      V_{\div}^{h}(g)$ dass $v_{h}^{0}\coloneqq u_{h} + w_{h} \in
+      V_{\div}^{h}(g)$. Daraus folgt
+      \begin{align*}
+        \nu\nnorm{\nabla v_{h}^{0}} &= \nu(\nabla u_{h}, \nabla v_{h}^{0}) - \nu(\nabla w_{h}, \nabla v_{h}^{0}) \\
+        &= (f, v_{h}^{0}) + \underbrace{(p_{h}, \nabla\cdot v_{h}^{0})}_{= 0} - \nu(\nabla w_{h}, \nabla v_{h}^{0}) \\
+        &= \nu(\nabla u, \nabla v_{h}^{0}) - (p, \nabla\cdot v_{h}^{0}) - \nu(\nabla w_{h}, \nabla v_{h}^{0}) \\
+        &= \nu(\nabla u - \nabla w_{h}, \nabla v_{h}^{0}) - (p- q_{h}, \nabla\cdot v_{h}^{0})\\
+        &\leq\nu \nnorm{\nabla u - \nabla w_{h}}\cdot\nnorm{\nabla v_{h}^{0}} + \nnorm{p- q_{h}}_{Q}\cdot\nnorm{ \nabla\cdot v_{h}^{0}}\\
+        \implies \quad \nnorm{\nabla v_{h}^{0}} &\leq \nnorm{\nabla u
+          - \nabla w_{h}}_{L^{2}} + \frac 1 \nu \nnorm{p- q_{h}}_{Q}
+      \end{align*}
+      ($(q_{h}, \nabla\cdot v_{h}^{0}) = 0$).  Dreiecksungleichung:
+      \begin{align*}
+        \nnorm{u- u_{h}} &\leq \nnorm{u - w_{h}}_{V} + \underbrace{\nnorm{ w_{h} - u_{h}}_{V}}_{= v_{h}^{0}}\\
+        &\leq \nnorm{u - w_{h}}_{V} + \nnorm{ v_{h}^{0}}_{V}\\
+        &\leq 2\nnorm{u - w_{h}}_{V} + \frac 1 \nu \nnorm{p - q_{h}}_{Q}\\
+        \implies \nnorm{u - u_{h}} & \leq 2 \inf_{w_{h} \in
+          V_{\div}^{h}(g)} \nnorm{u - w_{h}}_{V} + \frac 1 \nu
+        \inf_{q_{h} \in Q_{h}} \nnorm{p - q_{h}}_{Q}
+      \end{align*}
+    \item
+      \begin{align*}
+        \nnorm{p - p_{h}}_{Q}\leq \nnorm{p- q_{h}}_{Q} + \nnorm{p_{h}
+          - q_{h}}_{Q}.
+      \end{align*}
+      Es gilt
+      \begin{align*}
+        \nnorm{p_{h} - q_{h}}_{Q} &\leq \frac 1 {\beta_{h}} \sup_{0 \neq v_{h} \in V_{h}} \frac{(\nabla\cdot v_{h}, p_{h} - q_{h})}{ \nnorm{v_{h}}_{V}}\\
+        &=\frac 1 {\beta_{h}} \sup_{0 \neq v_{h} \in V_{h}} \frac{ - \nu(\nabla u  - \nabla u_{h}, \nabla v_{h}) + (\nabla\cdot v_{h},  p - q_{h})}{\nnorm{v_{h}}_{V}}\\
+        &=\frac 1 {\beta_{h}} \nu \nnorm{u - u_{h}}_{V} + \nnorm{p - q_{h}}_{Q}\\
+        \nnorm{p - p_{h}} &\leq \(1 + \frac 1 {\beta_{h}}\)
+        \inf_{q_{h}\in Q_{h}}\nnorm{p- q_{h}}_{Q} + \frac \nu
+        {\beta_{h}}\nnorm{u - u_{h}}_{V}
+      \end{align*}
+    \item Folgt mit (i) und Lemma 2.21?.
+    \end{enumerate}
+  \end{beweis}
+  \begin{lemma}\label{lem:2-28}
+    Seien $V_{h}$ und $Q_{h}$ so gewählt, dass $\nabla\cdot
+    [V_{h}]\subset Q_{h}$ gilt. Dann gelten die Fehlerabschätzungen
+    \begin{enumerate}
+    \item $\nnorm{u- u_{h}}_{V} \leq 2 \inf_{w_{h} \in V_{\div}(g)}
+      \nnorm{u - w_{h}}_{V}$
+    \item $\nnorm{p- \Pi_{h} p}_{Q} \leq \frac \nu {\beta_{h}}
+      \nnorm{u - u_{h}}_{V}$ (hängt nur von $u$/$u_{h}$ ab!)
+    \item $\nnorm{p- p_{h}}_{Q} \leq \inf_{q_{h} \in Q_{h}} \nnorm{p -
+        q_{h}}_{Q} + \frac \nu {\beta_{h}} \nnorm{u - u_{h}}_{V}$
+    \item Sei $g = 0$: $\nnorm{u- u_{h}}_{V} \leq \inf_{w_{h} \in
+        V_{\div}^{h}} \nnorm{u - w_{h}}_{V}$
+    \item $\nnorm{u - u_{h}}_{V} \leq 2 (1 + C_{p}) \inf_{w_{h} \in
+        V_{h}} \nnorm{u-w_{h}}_{V}$.
+    \end{enumerate}
+    Dabei seien $(u_{h}, p_{h})$ Lösungen des entsprechenden
+    Stokes-Problemes wie in Lemma \ref{lem:2-27}.
+  \end{lemma}
+
+\begin{beweis}
+  Zunächst gilt $V_{\div}^{h} \subset V_{\div}$.
+  \begin{enumerate}
+  \item $v_{h}^{0}\coloneqq v_{h} - w_{h} \in V_{\div}^{h}$, wenn
+    $w_{h} \in V_{\div}^{h}(g)$ beliebig gewählt ist.
+    \begin{align*}
+      \nu\nnorm{v^{0}_{h}}_{V}^{2} &= \nu(\nabla v_{h}, \nabla v_{h}^{0}) - \nu(\nabla w_{h}, \nabla v_{h}^{0}) \\
+      &= (f , v_{h}^{0})-\underbrace{(p_{h}, \nabla\cdot v_{h}^{0})}_{= 0}- \nu (\nabla w_{h}, \nabla v_{h}^{0})\\
+      &= \nu(\nabla u, \nabla v_{h}^{0})-\underbrace{(p, \nabla\cdot v_{h}^{0})}_{= 0, \text{ da }V_{\div}^{h}\subset V_{\div}}- \nu (\nabla w_{h}, \nabla v_{h}^{0})\\
+      &= \nu(\nabla( u - w_{h}), \nabla v_{h}^{0})\\
+      &\leq \nu \nnorm{ \nabla u - \nabla w_{h}}_{L^{2}}\cdot\nnorm{\nabla v_{h}^{0}}\\
+      \implies \quad \nnorm{\nabla v_{h}^{0}}_{V}&\leq \nnorm{u -
+        w_{h}}_{V}
+    \end{align*}
+    Dreiecksungleichung:
+    \begin{align*}
+      \nnorm{u - u_{h}}_{V} \leq \nnorm{u - w_{h}}_{V} +
+      \nnorm{v_{h}^{0}}_{V} \leq 2 \nnorm{u - w_{h}}_{V}.
+    \end{align*}
+  \item
+    \begin{align*}
+      (\Pi_{h} p - p_{h}, \nabla\cdot v_{h}) &= (\Pi_{h}p, \nabla \cdot v_{h}) + (f,  v_{h}) - \nu(\nabla u_{h}, \nabla v_{h})\\
+      &= (\Pi_{h}p, \nabla \cdot v_{h}) + \nu(\nabla u, \nabla v_{h}) -\underbrace{(p, \nabla\cdot v_{h})}_{= (\Pi_{h}p, \nabla\cdot v_{h}), [\nabla\cdot V_{h}] \subset Q_{h}}- \nu(\nabla u_{h}, \nabla v_{h})\\
+      &= \nu(\nabla u, \nabla v_{h})- \nu(\nabla u_{h}, \nabla v_{h})\\
+      \implies \quad \nnorm{\Pi_{h} p - p_{h}}_{Q} &\leq \frac \nu {\beta_{h}} \sup_{0 \neq v_{h} \in V_{h}} \frac{\nu(\nabla u - \nabla v_{h}, \nabla v_{h})}{ \nnorm{\nabla v_{h}}_{L^{2}}} \\
+      & \leq \frac \nu {\beta_{h}}\nnorm{u-u_{h}}_{V}
+    \end{align*}
+  \item
+    \begin{align*}
+      \nnorm{p - p_{h}}_{Q} \leq \underbrace{\nnorm{p - \Pi_{h} p}_{Q}}_{\inf_{q_{h} \in Q_{h}} \nnorm{p - q_{h}}} + \nnorm{\Pi_{h} p - q_{h}} + \frac \nu {\beta_{h}} \nnorm{u - u_{h}}_{V}
+    \end{align*}
+  \item Sei $g = 0$: Für alle $v_{h}^{0} \in V_{\div}^{h}$ gilt:
+    \begin{align*}
+      \nu(\nabla u_{h}, \nabla v_{h}^{0}) - \underbrace{(p_{h}, \nabla\cdot v_{h}^{0})}_{= 0} &= (f, v_{h}^{0})\\
+      &= \nu(\nabla u_{h}, \nabla v_{h}^{0}) - \underbrace{(p, \nabla\cdot v_{h}^{0})}_{= 0} \\
+      \implies \quad (\nabla u - \nabla u_{h}, \nabla v_{h}^{0}) &= 0\quad \forall v_{h}^{0} \in V_{div}^{0}\\
+      \nnorm{u - u_{h}}_{V}^{2} &= (\nabla u - \nabla u_{h}, \nabla u - \nabla u_{h}) \\
+      &= (\nabla - \nabla u_{h}, \nabla u - \nabla(\underbrace{u_{h} u_{h}^{0}}_{\eqqcolon w_{h}})) \\
+      &= (\nabla u - \nabla u_{h}, \nabla u - \nabla w_{h})\\
+      &\leq \nnorm{u - u_{h}}_{V} \cdot \nnorm {u - w_{h}}_{V}\\
+      \implies \quad \nnorm{u - u_{h}} &\leq \inf_{w_{h} \in V_{\div}^{h}} \nnorm{u - w_{h}}_{V}.
+    \end{align*}
+  \item klar, Fortin-Interpolator. 
+  \end{enumerate}
+\end{beweis}
+\begin{beispiel}%2.29
+ Beispiele von Paaren $(V_{h}, Q_{h})$ von Räumen, die die diskrete Inf-Sup-Bedingung verletzen.
+\end{beispiel}
+\begin{bemerkung}%2.30
+  Einfache Paare von FEM-Räumen
+
+Die einfachsten und gebräuchlichsten FEM-Räume sind stetige, stückweise affine Polynome ($P_{1}$-Funktionen) auf Simplizes oder bilineare Funktionen $Q_{1}$ auf Vierecken bzw. trilineare Funktionen ($Q_1$) auf Hexaedern in 3D. Der einfachste konforme Druckraum ist $P_{0}$, die Untersuchung der diskreten Inf-Sup-Konstanten für das $P_{1}$-$P_{1}$ oder $P_{1}$-$P_{0}$ oder $Q_{1}$-$P_{0}$-Element (jeweils $V_{h}$-$Q_{h}$) zeigt aber, dass diese Räume nicht Inf-Sup-stabil sind.  
+\end{bemerkung}
+%\datum{15. Juni 2015}
+
+\begin{beispiel*} $P_{1}-P_{1}$-Element
+
+Ein Element, das man gerne verwenden würde, wäre das (unstabilisierte) $P_{1}-P_{1}$-Element. Aber $P_{1}-P_{1}$ ist im Allgemeinen nciht inf-sup-stabil. Sei $K$ ein Druck, und seien $q_{1, k}^{l}$, $q_{2, k}^{l}$ und $q_{3, k}^{l}$ die Druckwerte in den Knoten von $K$. Dann kann das Integral
+\begin{align*}
+  \int_{K} q_{K} dx = \frac 1 3 \norm K (q_{1, k}^{l} + q_{2, k}^{l} + q_{3, k}^{l})
+\end{align*}
+exakt ausgewertet werden. Die Integralmittelwertbedingung $q_{K} \in L_{0}^{2}(\Omega)$ für die diskreten Drücke lautet
+\begin{align}\label{eq:star_ex}
+  0 = \int_{\Omega} q_{K} dx = \sum_{K}\int_{K} dx = \sum_{K} \frac {\norm K} 3 (q_{1, k}^{l} + q_{2, k}^{l} + q_{3, k}^{l}). 
+\end{align}
+Es wird nun eine Druckmode $q_{h} \in Q_{h}$ konstruiert, sodass $(\nabla\cdot v_{h}, q_{h}) = 0$ für alle $v_{h} \in V_{h}$. 
+Auf jedem Dreieck gilt
+\begin{align*}  
+v_{h}|_{K} &=
+\begin{pmatrix}
+  a_{11} x + a_{12}y + \gamma_{1}\\ a_{21}x + a_{22}y + \gamma_{2}
+\end{pmatrix}\\
+\implies \nabla\cdot v_{h} &= a_{11} + a_{22} = c_{K}\\
+\implies - \int_{\Omega} (\nabla\cdot v_{h}) q_{h} dx &= - \sum_{K} \int_{K} (\nabla\cdot v_{h}) q_{h} dx\\
+&= - \sum_{K} c_{K} \int_{K} q_{h}dx = - \sum_{K} \frac{\norm K} 3 c_{K}(\underbrace{q_{1, k}^{l} + q_{2, k}^{l} + q_{3, k}^{l}}_{\stackrel ! =  0})\\
+& \stackrel ! = 0. 
+\end{align*}
+Man kosntruiert also eine Druckmode, indem man $q_{h}$ so wählt, dass $q_{1, k}^{l} + q_{2, k}^{l} + q_{3, k}^{l} = 0 $ für alle $K \in \cT_{h}$ gilt. Dann ist auch automatisch die Untegralmitteleigenschaft \eqref{eq:star_ex} erfüllt. 
+Zwei solche Druckmoden sind gegeben durch: 
+
+\begin{figure}[h!]
+  \centering
+  \begin{tikzpicture}
+    \draw (0,0) -- (0, 4);
+    \draw (1,0) -- (1, 4);
+    \draw (2,0) -- (2, 4);
+    \draw (3,0) -- (3, 4);
+    \draw (4,0) -- (4, 4);
+
+    \draw (0,0) -- (4, 0);
+    \draw (0,1) -- (4, 1);
+    \draw (0,2) -- (4, 2);
+    \draw (0,3) -- (4, 3);
+    \draw (0,4) -- (4, 4);
+
+    \draw (0,0) -- (4, 4);
+    \draw (0,1) -- (3, 4);
+    \draw (0,2) -- (2, 4);
+    \draw (0,3) -- (1, 4);
+    \draw (1,0) -- (4, 3);
+    \draw (2,0) -- (4, 2);
+    \draw (3,0) -- (4, 1);
+    \draw[color = green] (0, 4) node[above left] {$1$};
+    \draw[color = green] (0, 3) node[left] {$0$};
+    \draw[color = green] (0, 2) node[left] {$-1$};
+    \draw[color = green] (0, 1) node[left] {$1$};
+    \draw[color = green] (0, 0) node[below left] {$0$};
+
+    \draw[color = green] (1, 4) node[above] {$-1$};
+    \draw[color = green] (1, 3) node[left] {$1$};
+    \draw[color = green] (1, 2) node[left] {$0$};
+    \draw[color = green] (1, 1) node[left] {$-1$};
+    \draw[color = green] (1, 0) node[below] {$1$};
+
+
+    \draw[color = green] (2, 4) node[above] {$0$};
+    \draw[color = green] (2, 3) node[left] {$-1$};
+    \draw[color = green] (2, 2) node[left] {$1$};
+    \draw[color = green] (2, 1) node[left] {$0$};
+    \draw[color = green] (2, 0) node[below] {$-1$};
+
+    \draw[color = green] (3, 4) node[above] {$1$};
+    \draw[color = green] (3, 3) node[left] {$0$};
+    \draw[color = green] (3, 2) node[left] {$-1$};
+    \draw[color = green] (3, 1) node[left] {$1$};
+    \draw[color = green] (3, 0) node[below] {$0$};
+
+
+    \draw[color = green] (4, 4) node[above right] {$-1$};
+    \draw[color = green] (4, 3) node[right] {$1$};
+    \draw[color = green] (4, 2) node[right] {$0$};
+    \draw[color = green] (4, 1) node[right] {$-1$};
+    \draw[color = green] (4, 0) node[below right] {$1$};
+
+  \end{tikzpicture}
+\hspace{2cm}
+  \begin{tikzpicture}
+    \draw (0,0) -- (0, 4);
+    \draw (1,0) -- (1, 4);
+    \draw (2,0) -- (2, 4);
+    \draw (3,0) -- (3, 4);
+    \draw (4,0) -- (4, 4);
+
+    \draw (0,0) -- (4, 0);
+    \draw (0,1) -- (4, 1);
+    \draw (0,2) -- (4, 2);
+    \draw (0,3) -- (4, 3);
+    \draw (0,4) -- (4, 4);
+
+    \draw (0,0) -- (4, 4);
+    \draw (0,4) -- (4, 0);
+
+    \draw (0,3) -- (1, 2);
+    \draw (1,4) -- (2, 3);
+
+    \draw (0,1) -- (1, 2);
+    \draw (1,0) -- (2, 1);
+
+    \draw (3,0) -- (2, 1);
+    \draw (4,1) -- (3, 2);
+
+    \draw (2,3) -- (3, 4);
+    \draw (3,2) -- (4, 3);
+
+    \draw[color = green] (0, 4) node[above left] {$1$};
+    \draw[color = green] (0, 3) node[left] {$0$};
+    \draw[color = green] (0, 2) node[left] {$-1$};
+    \draw[color = green] (0, 1) node[left] {$0$};
+    \draw[color = green] (0, 0) node[below left] {$1$};
+
+    \draw[color = green] (1, 4) node[above] {$0$};
+    \draw[color = green] (1, 3) node[left] {$-1$};
+    \draw[color = green] (1, 2) node[left] {$1$};
+    \draw[color = green] (1, 1) node[left] {$-1$};
+    \draw[color = green] (1, 0) node[below] {$1$};
+
+
+    \draw[color = green] (2, 4) node[above] {$-1$};
+    \draw[color = green] (2, 3) node[left] {$1$};
+    \draw[color = green] (2, 2) node[left] {$0$};
+    \draw[color = green] (2, 1) node[left] {$1$};
+    \draw[color = green] (2, 0) node[below] {$-1$};
+
+    \draw[color = green] (3, 4) node[above] {$0$};
+    \draw[color = green] (3, 3) node[left] {$-1$};
+    \draw[color = green] (3, 2) node[left] {$1$};
+    \draw[color = green] (3, 1) node[left] {$-1$};
+    \draw[color = green] (3, 0) node[below] {$0$};
+
+
+    \draw[color = green] (4, 4) node[above right] {$1$};
+    \draw[color = green] (4, 3) node[right] {$0$};
+    \draw[color = green] (4, 2) node[right] {$-1$};
+    \draw[color = green] (4, 1) node[right] {$0$};
+    \draw[color = green] (4, 0) node[below right] {$1$};
+
+  \end{tikzpicture}
+
+  \caption{Schachbrettinstabilitäten, $n = 4$}
+  \label{fig:schachbrett}
+\end{figure}
+
+Diese Druckmoden heißen \markdef{Schachbrettinstabilitäten}. 
+\end{beispiel*}
+\begin{beispiel} Das $P_{1}-P_{0}$-Element
+
+Die diskrete Inf-Sup-Bedingung erzwingt, dass der diskrete Druckraum genügend klein ist. Für das $P_{1}-P_{1}$-Element gilt das nicht. Beim  $P_{1}-P_{0}$-Element versucht man, dies mit Funktionen niedrigerer Ordnung für den Druck. Für $P_{1}-P_{0}$ gilt $\nabla\cdot[P_{1}]\subset P_{0}$, das heißt, diskret divergenzfreie Funktionen sind divergenzfrei im schwachen Sinn.
+\begin{align*}
+  u_{h} \in V_{\div}^{h}: \int_{\Omega} (\nabla\cdot u_{h}) q_{h} dx = 0 \quad \forall q_{h} \in Q_{h}\\
+q_{h} = \nabla\cdot[P_{1}] \subset P_{0}\\
+\implies \int_{\Omega} (\nabla\cdot u_{h})^{2} dx = 0 \implies \nabla\cdot u_{h} = 0
+\end{align*}
+Das $P_{1}-P_{0}$ Element erfüllt jedoch im Allgemeinen die diskrete Inf-Sup-Bedingung nicht. Auf dem obigen Gitter haben ein $P_{1}$-Druck (25-1) Freiheitsgrade und $P_{0}$ (32-1) Freiheitsgrade. Deshalb sind Druckmoden zu erwarten. Darüberhinaus kann es zu einem sogenannten \emph{Locking} kommen. Um zu zeigen, dass störende Druckmoden (spurious oscillations) auftreten können, betrachten wir ein strukturiertes Gitter vom obigen Typ mit $2n^{2}$ Dreiecken, $n> 1$. Dann
+\begin{align*}
+\dim V_{h} = 2(n-1)^{2}  
+\end{align*}
+(Anzahl der inneren Knoten, mit zwei Geschwindigkeitskomponenten). Weiter gilt
+\begin{align*}
+  Q_{h} = 2n^{2} -1. 
+\end{align*}
+Es folgt
+\begin{align*}
+  \dim V_{h} - \dim Q_{h} = \dim V_{\div}^{h} = 2n^{2} - 4n + 2 - 2n^{2} + 1= -4n + 3 < 0, 
+\end{align*}
+für $n \geq 1$. Folglich ist die notwendige Bedingung $\dim(V_{h}) \geq \dim(Q_{h})$ nicht gegeben. Deshalb sind mindestens $(4n-3)$ Zeilen von $B_{h}$ abhängig. Deshalb gibt es einen Unterraum der Dimension $4n - 3$, sodass für alle $q_{n}$ aus diesem Unterraum gilt $- (\nabla\cdot v_{h}, q_{h})$ für alle $v_{h} \in V_{h}$. Man kann dieses einfache Beispiel auf komplexe Gebiete und Triangulierungen verallgemeinern. 
+\end{beispiel}
+Nun zum Locking-Phänomen:
+Betrachte $\Omega = (0, 1)^{2}$ mit der gezeichneten Triangulierung.
+\begin{figure}[h!]
+  \centering
+  \begin{tikzpicture}
+    \draw (0, 0) rectangle (2, 2);
+    \draw (2, 2) -- (0, 0);
+    \draw (0, 2) -- (2, 0);
+
+    \draw (1, 0.5) node[below] {$K_{4}$};
+    \draw (1, 1.5) node[above] {$K_{2}$};
+    \draw (0.5, 1) node [left] {$K_{1}$};
+    \draw (1.5, 1) node[right] {$K_{3}$};
+    \draw (1, 1) node[below] {$m$};
+    \fill (1, 1) circle (2pt);
+  \end{tikzpicture}
+  \caption{Triangulierung}
+  \label{fig:tri}
+\end{figure}
+ Die stückweise konstanten Drücke auf $K_{i}$, $i = 1, \dots, 4$, seien mit $q_{h}^{1}, \dots, q_{h}^{4}$ bezeichnet. 
+Aus $q_{h} =  q_{n}^{1} + q_{n}^{2} + q_{n}^{3}+ q_{n}^{4} \in L_{0}^{2} (\Omega_{h}) $  folgt
+\begin{align*}
+  \int_{\Omega} q_{h} dx = 0 \iff q_{n}^{1} + q_{n}^{2} + q_{n}^{3}+ q_{n}^{4} = 0, 
+\end{align*}
+da alle Dreiecke $K$ die gleiche Fläche haben. Es gibt also drei unabhängige Druckfreiheitsgrade. Eine Funktion $v_{h} \in V_{\div}^{h}$ muss also drei unabhängige Bedingungen erfüllen. Eine Funtkeion $u_{h} \in V_{h}$ hat jedoch nur zwei unabhängige Freiheitsgrade (im Mittelpunkt des Gitters). 
+
+Sei $v_{h} = (u_{h}^{1}, u_{h}^{2})^{T}$, dann gilt
+\begin{align*}
+  \nabla\cdot v_{h}|_{K_{1}} &= \frac {u_{h}^{1} (m)} {\frac 12} = - \nabla\cdot v_{h}|_{K_{3}}\\
+  \nabla\cdot v_{h}|_{K_{4}} &= \frac {u_{h}^{2} (m)} {\frac 12} = - \nabla\cdot v_{h}|_{K_{2}}. 
+\end{align*} 
+Falls $v_{h} \in V_{\div}^{h}$ sein soll, muss gelten
+\begin{align*}
+   0&= ( \nabla\cdot v_{h}, q_{h}) = \norm{K_{1}} (q_{h}^{1} \nabla\cdot v_{h}|_{K_{1}} + q_{h}^{2} \nabla\cdot v_{h}|_{K_{2}} + q_{h}^{3} \nabla\cdot v_{h}|_{K_{3}} + q_{h}^{4} \nabla\cdot v_{h}|_{K_{4}})\\
+&=\norm{K_{1}} (2 u_{h}^{1} (m)q_{h}^{1} - 2 u_{h}^{1}(m)q_{h}^{3} - 2 u_{h}^{2}(m) q_{h}^{2} q_{h}^{2} + 2 q_{h}^{2}(m) (- q_{h}^{1} - q_{h}^{2} - q_{h}^{3}))\\
+&=\norm{K_{1}} (2 u_{h}^{1} (m)(q_{h}^{1} q_{h}^{3}) - 2 u_{h}^{2}(m)(2q_{h}^{2} + q_{h}^{1} + q_{h}^{3}))
+\end{align*}
+für beliebige $q_{h}^{1},q_{h}^{2},q_{h}^{3}$. Setze $q_{h}^{1} = 1, q_{h}^{3} = 0$, dann folgt $u_{h}^{2} = 0$. Setze $q_{h}^{3} = 0, q_{h}^{2} = 0$, dann folgt $u_{h}^{1} = u_{h}^{2} = 0$. Schließlich folgt $V_{\div}^{h} = \set 0$.
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "vorlesung"
+%%% End: 
