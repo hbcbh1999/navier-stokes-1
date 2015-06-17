@@ -1,0 +1,6 @@
+\section{Die Navier-Stokes-Gleichungen als Modell für inkompressible Strömungen}
+\begin{bemerkung}
+  Grundprinzipien und Variablen
+
+Die Grundgleichungen der Fluiddynamik werden Navier-Stokes-Gleichungen genannt. Im isothermen Fall, das heißt, eine Strömung konstanter Temperatur, betrachten wir zwei physikalische Bilanzgleichungen: die Masseerhalung und die Impulsbilanz /Impulserhaltung. Es gibt verschiedene Wege, diese Gleichungen herzuleiten. Im Folgenden wird ein klassischer Zugang aus der Kontinuumsmechanik präsentiert. In der Herleitung sind einige Schritte phänomenologisch/heuristisch begründet. 
+\end{bemerkung}

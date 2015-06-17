@@ -1,0 +1,463 @@
+%\datum{13. April 2015}
+\section{Die Navier-Stokes-Gleichungen als Modell für inkompressible Strömungen}
+\begin{bemerkung}
+  Grundprinzipien und Variablen
+
+Die Grundgleichungen der Fluiddynamik werden \markdef{Navier-Stokes-Gleichungen} genannt. Im isothermen Fall, das heißt, eine Strömung konstanter Temperatur, betrachten wir zwei physikalische Bilanzgleichungen: die Masseerhalung und die Impulsbilanz /Impulserhaltung. Es gibt verschiedene Wege, diese Gleichungen herzuleiten. Im Folgenden wird ein klassischer Zugang aus der Kontinuumsmechanik präsentiert. In der Herleitung sind einige Schritte phänomenologisch/heuristisch begründet. 
+
+Die Strömung wird durch folgende Variablen beschrieben:
+\begin{itemize}
+\item $\rho(t, x)$: Dichte [kg/m$^{3}$]
+\item $v(t, x)$: Geschwindigkeit [m/s]
+\item $p(t, x)$: Druck [Pascal: Pa = N/m$^{2}$].
+\end{itemize}
+Diese werden als genügend glatte Funktionen angenommen. Das \markdef{Gebiet} wird $\Omega \subset \R^{3}$ genannt. Die zeitliche Evolution wird im Zeitintervall $[0, T]$ modelliert. 
+\end{bemerkung}
+
+\subsection{Die Massenerhaltung}
+\begin{bemerkung} Ein Erhaltungssatz
+
+Sei $\omega$ ein beliebiges, offenes Teilgebiet von $\Omega$ mit genügend glatter Oberfläche $\partial \omega$, das konstant in der Zeit ist. Dann ist die Gesamtmasse in $\omega$ gegeben durch
+\begin{align*}
+  m(t) = \int_{\omega}\rho(t, x) \,dx
+\end{align*}
+(in [kg]).
+
+Wenn die Masse in der zeitlichen Evolution in $\omega$ erhalten bleibt, so muss die zeitliche Rate der Massenänderung mit dem Massenfluss $\rho v(t, x)$ [kg/m$^{3}$s] über die Oberfläche von $\partial \omega$ übereinstimmen. Das heißt, die Änderung der Masse beträgt
+\begin{align}\label{eq:mass_deriv}
+  \frac{d}{dt} m(t) = \frac d {dt} \int_{\omega} \rho(t, x) dx = - \int_{\pd \omega} \rho v(t, x) \cdot n \,ds,
+\end{align}
+wobei $n(s)$ eine äußere Einheitsnormale bei $s \in \pd \omega$ ist. Da alle Funktionen als genügend glatt angenommen werden, kann der Gauß'sche Satz angewendet werden. 
+
+Mit \eqref{eq:mass_deriv} führt dies auf
+\begin{align*}
+  \int_{\omega} \pd_{t}\rho(t, x) + \nabla\cdot(\rho v)\,dx = 0. 
+\end{align*}
+Da $\omega$ ein beliebiges Kontrollvolumen ist, folgt
+\begin{align}\label{eq:continuous_mass}
+  \pd_{t} \rho + \nabla \cdot(\rho v) = 0, \qquad \forall t \in [0, T], \, x \in \Omega
+\end{align}
+(schöne Integralgleichung).
+Diese Erhaltungsgleichung ist die erste Grundgleichung der Fluiddynamik., die (Massen-)Kontinuitätsgleichung.  
+\end{bemerkung}
+\begin{bemerkung} Inkompressible, homogene Fluide
+
+Wenn das Fluid inkompressibel ist (Flüssigkeit) und homogen, das heißt, es besteht aus einer Komponente, dann, wird angenommen, gilt approximativ
+\begin{align*}
+  \rho(t, x)= \rho = c
+\end{align*}
+und \eqref{eq:continuous_mass} reduziert sich auf
+\begin{align*}
+  &0 = \rho_{t} + \nabla\cdot(\rho v) =  \rho \cdot \nabla v + v \cdot \nabla \rho = \rho \nabla \cdot v\\
+\Rightarrow \quad&\nabla \cdot v = 0.
+\end{align*}
+Es wird angenommen, dass
+\begin{align*}
+  v(t, x) =
+  \begin{pmatrix}
+    v_{1}(t, x)\\
+    v_{2}(t, x)\\
+    v_{3}(t, x)
+  \end{pmatrix}
+\end{align*}
+und es gilt
+\begin{align*}
+  \nabla \cdot v = \pd_{x} v_{1} + \pd_{y} v_{2} + \pd_{z} v_{3}.
+\end{align*}
+Daher reduziert sich im inkompressiblen Fall die Massenerhaltung in einem homogenen, imkompressiblen Fluid auf eine (geometrische) Zwangsbedingung an das Geschwindigkeitsfeld. 
+
+%Mit 'geometrisch' ist gemeint: in jedem Punkt muss genau das rausfließen, was reinfließt. 
+\end{bemerkung}
+\subsection{Die Bilanzgleichung / Erhaltungsgleichungen für den Impuls}
+\begin{bemerkung} Newtons zweite Bewegungsgleichung
+  
+Die Bilanzgleichung für den Impuls folgt aus Newtons Bewegungsgleichung
+\begin{align}\label{eq:n2}
+  \text{Kraft} = \text{Masse} \cdot \text {Beschleunigung}.
+\end{align}
+Diese Gleichung sagt aus, dass die Änderungsrate des Impulses gleich der Gesamtkraft auf die Fluidpartikel in einem Kontrollvolumen ist. 
+\end{bemerkung}
+\begin{bemerkung} Beschleunigung
+  
+Man betrachtet ein Fluidpartikel zur Zeit $t$ am Ort $x$ mit geschwindikeit $v(t, x)$ in einem Zeitintervall $\Delta t$. Eine lineare Extrapolation des Partikelpfades ergibt, dass sich das Teilchen zur Zeit $(t + \Delta t)$ sich am Ort $(x + \Delta t v)$ befindet.
+
+Die Beschleunigung des Teilchens ergibt sich zu
+\begin{align*}
+  \frac{D v}{\Delta t}(t, x) &= \lim_{t \to 0}\frac{v(t + \Delta t, x + \Delta t v (t, x)) - v(t, x)}{\Delta t}\\
+&\approx \lim_{\Delta t \to 0} \frac{v(t, x)+ \Delta t \cdot \pd_{t}v(t, x) + \nabla v(t, x)(\Delta t \cdot v) - v(t, x)}{\Delta t}\\
+&=\pd_{t} v (t, x) + \nabla v(t, x)\cdot v(t, x)
+\end{align*}
+Hier wird mit $\nabla v$ bezeichnet:
+\begin{align*}
+  \nabla v =
+  \begin{pmatrix}
+    \pd_{x} v_{1} &     \pd_{y} v_{1} &     \pd_{z} v_{1} \\
+    \pd_{x} v_{2} &     \pd_{y} v_{2} &     \pd_{z} v_{2} \\
+    \pd_{x} v_{3} &     \pd_{y} v_{3} &     \pd_{z} v_{3} 
+  \end{pmatrix}.
+\end{align*}
+In der Fluiddynamik wird der Term $(\nabla v)\cdot v$ oft geschrieben als $(v \cdot \nabla) v$ oder $v \cdot \nabla v$. Gemeint ist jedenfalls immer
+\begin{align*}
+  (\nabla v)\cdot v =    \begin{pmatrix}
+    v_{1}\pd_{x} v_{1} &     v_{2}\pd_{y} v_{1} &     v_{3}\pd_{z} v_{1} \\
+    v_{1}\pd_{x} v_{2} &     v_{2}\pd_{y} v_{2} &     v_{3}\pd_{z} v_{2} \\
+    v_{1}\pd_{x} v_{3} &     v_{2}\pd_{y} v_{3} &     v_{3}\pd_{z} v_{3} 
+  \end{pmatrix}.
+\end{align*}
+Bei der Notation $(v \cdot\nabla) = v_{1} \pd_{x} + v_{2} \pd_{y} + v_{3} \pd_{z}$ denkt man an einen Operator, der auf jede einzelne Komponente von $v$ wirkt. 
+
+Der Gradient der Geschwindigkeit wird auch gerne als Tensor geschrieben:
+\begin{align*}
+  (\nabla v)_{ij} = \pd_{j} v_{i}, \qquad i, j = 1, 2, 3.
+\end{align*}
+Letztendlich wird eine Approximation erster Ordnung benutzt, um die Beziehung 'Masse $\cdot$ Beschleunigung' in beliebigen Kontrollvolumen zu modellieren.
+\begin{align*}
+  \text{'Masse} \cdot \text{Beschleunigung'} = \int_{\omega} \rho(t, x) (\pd_{t} v + (v \cdot \nabla) v (t, x)) v (t, x) dx
+\end{align*}
+(in [N]). Dieser Ausdruck muss noch mit der Gesamtkraft bilanziert werden, die  auf $\omega$ wirkt, gemäß der zweiten Bewegungsgleichung von Newton. 
+\end{bemerkung}
+%\datum{15. April 2015}
+\begin{bemerkung}
+  Alternative Ableitung: Der Impuls im Kontrollvolumen $\omega$ ist gegeben durch
+  \begin{align*}
+    \int_{\omega} \rho v (t, x) dx \quad [Ns].
+  \end{align*}
+Dann kann die Bilanzgleichung für den Impuls analog formuliert werden wie die Masseerhaltungen \eqref{eq:mass_deriv}:
+\begin{align*}
+\int_{\omega} (\rho v)_{t} dx =  \frac d {dt} \int_{\omega} \rho v (t, x) dx = - \int_{ \pd \omega}(\rho v)(v \cdot n)(t, s) ds + \int_{\omega} f_{net}(t, x) dx \quad [N]
+\end{align*}
+Hierbei bezeichnet $\frac d {dt} \int_{\omega} \rho v(t, x) dx$ die Änderungsraten des Impulses und der erste Term auf der rechten Seite modelliert den Impulsfluss über die Oberfläche von $\omega$ (im Strömungsfeld $v$). $f_{net}$ [N/m$^{3}$] bezeichnet eine sogenannte Kraftdichte. $\int_{\omega} f_{net}(t, x)dx$ bezeichnet dann die Gesamtkraft auf das Kontrollvolumen $\omega$. Weiter gilt:
+\begin{align*}
+  v (v \cdot n) = v v^{T}n.
+\end{align*}
+Partielle Integration und Vertauschen von Integration und Differentiation ergibt
+\begin{align*}
+  \int_{\omega} \frac d {dt} (\rho v) + \nabla\cdot(\rho v v ^{T})(t, x) dx = \int_{\omega} f_{net}(t, x)dx.
+\end{align*}
+Dabei wird Folgendes verwendet:
+\begin{itemize}
+\item Das dyadische Produkt ist
+  \begin{align*}
+    v v ^{T} =
+    \begin{pmatrix}
+      v_{1}v_{1} &       v_{1}v_{2} &       v_{1}v_{3} \\
+      v_{2}v_{1} &       v_{2}v_{2} &       v_{2}v_{3} \\
+      v_{3}v_{1} &       v_{3}v_{2} &       v_{3}v_{3} 
+    \end{pmatrix}
+ \eqqcolon v \otimes v.
+  \end{align*}
+\item Die Tensordivergenz
+  \begin{align*}
+    \nabla \cdot
+    \begin{pmatrix}
+      a_{11} &       a_{12} &      a_{13} \\
+      a_{21} &       a_{22} &      a_{23} \\
+      a_{31} &       a_{32} &      a_{33} 
+    \end{pmatrix}
+=
+\begin{pmatrix}
+  \nabla \cdot
+  \begin{pmatrix}
+    a_{11} \\ a_{12}\\ a_{13}
+  \end{pmatrix}\\
+  \nabla \cdot
+  \begin{pmatrix}
+    a_{21} \\ a_{22}\\ a_{23}
+  \end{pmatrix}\\
+  \nabla \cdot
+  \begin{pmatrix}
+    a_{31} \\ a_{32}\\ a_{33}
+  \end{pmatrix}
+\end{pmatrix}
+  \end{align*}
+\end{itemize}
+Die Produktregel ergibt
+\begin{align*}
+  \int_{\omega} \left( (\pd_{t} \rho) v + \rho \pd_{t}v + v v^{T} \nabla \rho + \rho(\nabla \cdot v) v + \rho(v \cdot \nabla) v\right) dx = \int_{\omega} f_{net}(t, x) dx.
+\end{align*}
+Es gilt nun
+\begin{align*}
+&  (\pd_{t} \rho)v + v v^{T}\nabla \rho + \rho(\nabla v)v = v (\pd_{t}\rho + v \cdot \nabla \rho + \rho \nabla \cdot v) = v \underbrace{(\pd_{t} \rho + \nabla \cdot (\rho v))}_{= 0}\\
+&\int_{\omega}(\rho \pd_{t} v + \rho(v \cdot \nabla) v)(t, x) dx = \int_{\omega} f_{net} (t, x) dx.
+\end{align*}
+Da $\omega$ als beliebig angenommen wurde, gilt die Bilanzgleichung 
+\begin{align*}
+  \rho \pd_{t}v + \rho(v \cdot \nabla)v = f_{net} \qquad \forall t \in [0, T], x \in \Omega.
+\end{align*}
+\end{bemerkung}
+\begin{bemerkung} Äußere Kräfte 
+
+Die Kräfte, die auf $\omega$ wirken, sind zusammengesetzt aus sogenannten \markdef{Volumen-/äußeren Kräften} und \markdef{inneren Kräften}. Äußere Kräfte sind zum Beispiel Schwerkraft, elektromagnetische Kräfte (in Flüssigmetallen), Corioliskraft. Diese Kräfte werden modelliert durch die Volumenkraft
+\begin{align*}
+  \int_{\omega} f_{ext}(t, x), \quad f_{ext}:\,[N/m^{3}].
+\end{align*}  
+\end{bemerkung}
+\begin{bemerkung} Cauchy'sche Spannungsprinzip und der Spannungstensor
+
+Innere Kräfte sind Kräfte, die das Fluid auf sich selbst ausübt. Diese Kräfte beinhalten den Druck und den Reibungswiderstand, den ein Flächenelement auf ein benachbartes Flächenelement auswirkt.
+Nach dem Cauchy'schen Spannungsprinzip werden die inneren Kräfte des Fluids als Kontraktionskräfte axiomatisch modelliert. Das bedeutet, es wird angenommen, dass sie an der Oberfläche $\pd \omega$ des Fluidelements angreifen. Es bezeichne $\vec t$ [N/m$^{2}$] diesen inneren Kraftvektor, der \markdef{Cauchy'sche Spannunsvektor} oder \markdef{Schnittspannungsvektor}. Dann ist der Beitrag der inneren Kräfte gegeben durch
+\begin{align*}
+  \int_{\pd \omega} \vec t (t, s) ds
+\end{align*}
+Addiert man die äußeren und inneren Kräfte, so erhält man als Bilanzgleichung für den Impuls für ein beliebiges, in der Zeit konstantes Kontrollvolumen
+\begin{align}\label{eq:bilanz}
+  \int_{\omega} \rho(\pd_{t} v) + (v \cdot \nabla) v dx = \int_{\omega} f_{ext} dx + \int_{\pd \omega} \vec t (t, s) ds.
+\end{align}
+Um eine partielle Differentialgleichung herleiten zu können, muss man $\int_{\pd \omega} \vec t(t, s) ds$ als \markdef{Volumenintegral} ausdrücken können. Dies wird im Folgenden hergeleitet. Dabei bezeichnet die rechte Seite von \eqref{eq:bilanz} die Gesamtkraft, die auf $\omega$ und $\pd \omega$ angreift. 
+
+Grundlage ist das Cauchy'sche Spannungsprinzip, das innere Kräfte als Kontakkräfte via
+\begin{align*}
+  \int_{\pd \omega} \vec t (t, s) ds
+\end{align*}
+modelliert. An jeder gedachten Ebene an $\pd \omega$ greift eine Kraft an, die \emph{geometrisch} nur von der Orientierung der Ebene, dem Ort $x \in \pd \omega$ und dem Zeitpunkt $t$ abhängt. Es gilt also $\vec t = \vec t (t, x, n)$. Der Schnittspannungsvektor hängt also zum Beispiel von der Krümmung von $\pd \omega$ aboder von Kräften, die außerhalb von $\pd \omega$ liegen, zum Beispiel Fernwirkung wie bei elektrischen Ladungen. Dabei bezeichnet $n$ eine äußere Normale der Tangentialebene an $\pd \omega$.  
+\end{bemerkung}
+Im Folgenden wird die grundlegende Überlegung von Cauchy modelliert. In jedem Punkt $x \in \pd \omega$ sind die Schnittspannungsvektoren zu verschiedenen gedachten Ebenen Linearkombinationen von einigen ausgezeichneten Richtungen, das heißt, sie lassen sich beschreiben als
+\begin{align*}
+  \vec t = \sigma^{T} \cdot n.
+\end{align*}
+Der Spannungstensor $\sigma^{T}$ ist eine Matrix und ist von der Orientierung der Schnittflächen unabhängig. Manchmal schreibt man, dass $\sigma$ eine lineare Abbildung vermittelt. Allerdings ist die Abbildung $\vec t = \vec t (n)$ natürlich nicht linear, da die Summe zweier Normalen normal ist. 
+Die Überlegungen fußen auf Cauchy's Tetraederargument:
+
+Sei $\omega$ ein Tetraeder mit Eckpunkten $p_{0} = (0, 0, 0)^{T}$, $p_{1} = (x_{1}, 0, 0)^{T}$, $p_{2} = (0, y_{2}, 0)$, $p_{3} = (0, 0, z_{3})$. Die Ebene, die von $p_{1}, p_{2}, p_{3}$ aufgespannt wird, wird mit $\pd \omega^{(n)}$ bezeichnet. Die äußere Normale von $\pd \omega^{(n)}$ ist gegeben durch
+\begin{align*}
+  n = \frac{(p_{2} - p_{1}) \times (p_{3} - p_{1})}{\nnorm{(p_{2} - p_{1}) \times (p_{3} - p_{1})}}, 
+\end{align*}
+und es gilt
+\begin{align*}
+  (p_{2} - p_{1}) \times (p_{3} - p_{1}) =
+  \begin{pmatrix}
+    -x_{1} \\ y_{2} \\ 0 
+  \end{pmatrix}
+\times 
+\begin{pmatrix}
+    -x_{1} \\ 0 \\ z_{3} 
+  \end{pmatrix}
+ = 
+\begin{pmatrix}
+    y_{2}z_{3} \\ x_{1}z_{3} \\ x_{1}y_{2} 
+  \end{pmatrix}.
+\end{align*}
+Dieser Vektor zeigt von $p_{0}$ weg, $n$ ist also eine äußere Normale von $n = (n_{1}, n_{2}, n_{3})^{T}$.
+%\datum{20. April 2015}
+
+%\datum{27. April 2015}
+\setcounter{satz}{13}
+\begin{bemerkung}
+  \begin{align*}
+    \V = a\D(v) + b(\nabla\cdot v) I
+  \end{align*}
+Diese lineare Beziehung ist nur eine Approximation an ein reelles Fluid. Im Allgemeinen wird die Bedingung nichtlinear sein. Nur für kleine Spannungen kann eine lineare Spannungs-Deformations-Beziehung verwendet werden. In solchen Fällen spricht man von \markdef{Newtonischen Fluiden}. (Nicht-Newtonische Fluide: z.B. Zahnpasta, Blut) 
+\end{bemerkung}
+\begin{bemerkung}Normal- und Scherspannung, Spur des Spannungstensors. 
+
+Die Diagonalkomponenten $\sigma_{11}, \sigma_{22}, \sigma_{33}$ des Spannungstensors werden \markdef{Normalspannung} und die Nebendiagonalelemente \markdef{Scherspannung} genannt. Für inkompressible Fluide gilt:
+\begin{align}\label{eq:spannungstensor_inkompressibel}
+  \sigma = 2 \mu \D (v) - PI.
+\end{align}
+Die Spur des Spannungstensors ist die Summe der Normalspannung
+\begin{align*}
+  \spur(\sigma) &= \sigma_{11} + \sigma_{22} + \sigma_{33}\\
+& = 2 \mu (\partial_{x} v_{1} + \partial_{y} v_{2} + \partial_{z} v_{3}) + 3(\zeta - \frac{2\mu} 3)(\nabla\cdot v) - 3 P\\
+&= 3 \zeta (\nabla \cdot v) - 3 P. 
+\end{align*}
+Für inkompressible Fluide gilt:
+\begin{align*}
+  P(t, x) = - \frac 1 3(\sigma_{11} + \sigma_{22} + \sigma_{33}).
+\end{align*}
+
+
+\begin{align*}
+(  \V = 2 \mu \D(v) + (\zeta - \frac{2 \mu} 3)I)
+\end{align*}
+
+\end{bemerkung}
+\begin{bemerkung}
+  Die Navier-Stokes-Gleichungen
+  \begin{align}\label{eq:ns}
+    \rho(\partial_{t} v + (v \cdot \nabla)v - 2 \nabla \cdot (\mu \D (v))) - \nabla \cdot ((\zeta - \frac {2 \mu} 3)(\nabla \cdot v)I) + \nabla p &= f_{\ext} \qquad (0, T] \times \Omega\\
+\partial_{t} \rho + \nabla\cdot (\rho v) &= 0 \qquad (0, T) \times \Omega
+  \end{align}
+Wenn das Fluid inkompressibel und homogen ist mit positiven Konstanten $\mu$ und $\rho$, erhält man die inkompressiblen Navier-Stokes-Gleichungen
+\begin{align}\label{eq:ns_inc}
+    \partial_{t} v  - 2  v \nabla \cdot (\D (v)) + (v \cdot \nabla)v + \nabla   \left( \frac p \zeta \right) &= \frac{f_{\ext}} \rho \qquad (0, T] \times \Omega\\
+\nabla \cdot v &= 0 \qquad (0, T] \times \Omega
+\end{align}
+Hier ist $v = \frac \mu \rho [m^{2}/s] $ die sogenannte kinematische Viskosität des Fluids. 
+\end{bemerkung}
+
+\subsection{Die entdimensionalisierten Navier-Stokes-Gleichungen}
+\label{sec:entd-navi}
+
+\begin{bemerkung} Charakteristische Skalen
+  
+Die mathematische Analysis und numerische Simulation basieren auf entdimensionalisierten (dimensionslosen) Gleichungen, die aus \eqref{eq:ns_inc} hergeleitet werden. Dazu werden folgende Größen eingeführt:
+\begin{itemize}
+\item $L [m]$: eine charakteristische Längenskala des Problems
+\item $U[m/s]$: eine charakteristische Geschwindigkeit
+\item $T^{*}[s]$: eine charakteristische Zeitskala
+\end{itemize}
+\end{bemerkung}
+\begin{bemerkung}
+  Die Navier-Stokes-Gleichung in entdimensionalisierter Form 
+
+Bezeichne $(t', x')[s, m]$ die alten Variablen. Wende die Transformation
+\begin{align}\label{eq:var_trafo}
+  x = \frac {x'} L, \quad u = \frac v U, \quad t = \frac {t'} {T^{*}} 
+\end{align}
+an, und man erhält aus \eqref{eq:ns_inc} und einer Reskalierung 
+\begin{align*}
+    \frac L {U T^{*}} \partial_{t} u  - \frac{2  \nu}{u\cdot L} \nabla \cdot (\D (u)) + (u \cdot \nabla)u + \nabla   \left( \frac P {\zeta U^{2}} \right) &= \frac L{\rho U^{2}}f_{\ext}  \qquad (0, T] \times \Omega\\
+\nabla \cdot u &= 0 \qquad (0, T] \times \Omega
+\end{align*}
+Auch das Gebiet und das Zeitintervall sind entdimensionalisiert. mit der Definition
+\begin{align}\label{eq:pressure}
+  p = \frac P {\rho  U^{2}}, \quad \Rey = \frac {U\cdot L}{ v}, \quad \St = \frac L {U T^{*}}, \quad f = \frac L {\rho  U^{2}} f_{\ext}
+\end{align}
+erhält man die Navier-Stokes-Gleichungen in entdimensionalisierter Form
+\begin{align}\label{eq:ns_nodim}
+      \St\partial_{t} u  - \frac2  \Rey \nabla \cdot (\D (u)) + (u \cdot \nabla)u + \nabla p&= f  \qquad (0, T] \times \Omega\\
+\nabla \cdot u &= 0 \qquad (0, T] \times \Omega
+\end{align}
+Die Konstanten $\Rey$ und $\St$ werden Reynoldszahl und Strouhalszahl genannt. Die Zahlen erlauben die Klassifizierung und den Vergleich und Strömungen. 
+\end{bemerkung}
+\begin{bemerkung}Inhärente Schwierigkeiten der Navier-Stokes-Gleichungen
+
+Um die Notation zu vereinfachen, setzt man die charakteristische Zeit auf $T^{*} = \frac L U$, sodass sich \eqref{eq:ns_nodim} vereinfacht zu
+\begin{align}\label{eq:ns_nodim_simple}
+  \partial_{t} u - 2 \nu \nabla \cdot (\D(v)) + (u \cdot \nabla) u + \nabla p &= f, \qquad (0, T] \times \Omega\\
+\nabla \cdot u &= 0, \qquad (0, T] \times \Omega
+\end{align}
+mit der dimensionslosen Konstante $\nu = \frac 1 \Rey$.  \eqref{eq:ns_nodim_simple} enthält folgende Schwierigkeiten:
+\begin{itemize}
+\item die Koppelung von Geschwindigkeit und Druck (zweite Gleichung definiert Druck wesentlich), 
+\item die Nichtlinearität des konvektiven Terms $(u \cdot \nabla) u$, 
+\item die Dominanz des konvektiven Terms gegenüber dem viskosen Terms, wenn $\nu$ klein ist. 
+\end{itemize}
+\end{bemerkung}
+
+\begin{bemerkung} Verschiedene Formen der Terme in \eqref{eq:ns_nodim_simple} 
+  
+Mithilfe von $\nabla \cdot u = 0$ wird der Reibungsterm vereinfacht:
+\begin{align*}
+&  \nabla \cdot \nabla u = \Delta u, \quad \nabla \cdot (\nabla u^{T}) = \nabla \cdot
+  \begin{pmatrix}
+    \partial_{x} u_{1} & \partial_{x} u_{2} & \partial_{x} u_{3} \\
+    \partial_{y} u_{1} & \partial_{y} u_{2} & \partial_{y} u_{3} \\
+    \partial_{z} u_{1} & \partial_{z} u_{2} & \partial_{z} u_{3} 
+  \end{pmatrix}
+ =
+ \begin{pmatrix}
+       \partial_{x} (\nabla \cdot u) \\
+       \partial_{y} (\nabla \cdot u) \\
+       \partial_{z} (\nabla \cdot u) 
+ \end{pmatrix}
+=
+\begin{pmatrix}
+  0\\0 \\0
+\end{pmatrix}
+\\
+\implies& - 2 \nu \nabla \cdot (\D(v)) = - 2 \nu \nabla \cdot \left( \frac 1 2 (\nabla u) + \frac 1 2 (\nabla u)^{T}\right) = - \nu \Delta u.
+\end{align*}
+Weiter gilt $(u \cdot \nabla) u = \nabla \cdot (u \otimes u)$, wenn $ \nabla \cdot u= 0$. In vielen Diskretisierungen wird die Divergenzbedingung relaxiert, Vorsicht!
+\end{bemerkung}
+\begin{bemerkung}
+  In einer stationären Strömung ändern sich Geschwindigkeit und Druck nicht in der Zeit. Dann gilt $\partial_{t} u = 0$. 
+Das ergibt die stationären Navier-Stokes-Gleichungen:
+\begin{align}\label{eq:ns_stat}
+  - \nu \Delta u + (u \cdot \nabla) u + \nabla p &= f, \quad \Omega\\
+\nabla \cdot u & = 0, \quad \Omega.
+\end{align}
+Notwendig für die Stationarität der Lösung ist, dass die Daten der Zeit (rechte Seite, Randbedingung) zeitunabhängig sind. Diese Bedingung ist aber nicht hinreichend (z.B. Kanalströmung mit großer Reynoldszahl). 
+\end{bemerkung}
+
+\begin{itemize}
+\item Wenn in einer stationären Strömung der viskose Impulstransport dem Konvektiven überwiegt (im Falle sehr kleiner Reynoldszahlen), dann kann der nichtlineare Term $(u \cdot \nabla) u$ vernachlässigt werden. Dies ergibt das lineare Stokes-Modell
+\begin{align}\label{eq:stokes}
+  - \Delta u + \nabla p &= f, \quad \Omega\\
+\nabla \cdot u &= 0, \quad \Omega
+\end{align}
+per Division durch $\nu$ und Neudefinition von $p$ und $f$.
+\item In der Numerik werden oft die Oseen-Gleichungen betrachtet. Dazu sei $u_{0}$ gegeben mit $\nabla \cdot u_{0} = 0$. Dann
+  \begin{align*}
+    - \nu \Delta u + (u_{0} \cdot \nabla) u + c \cdot u + \nabla p &= f, \quad \Omega\\
+\nabla \cdot u &= 0,\quad \Omega
+  \end{align*}
+mit einer positiven Konstanten $c > 0$. $c \cdot u$ kommt von einer Zeitdiskretisierung von $u_{t}$, $u_{t} = \frac {u^{n+1} - u^{n}}{\Delta t}$. 
+\end{itemize}
+%\datum{28. April 2015}
+
+\subsection{Anfangs- und Randwertbedingungen}
+\label{sec:anfangs-und-randw}
+
+\begin{bemerkung}
+  Die Navier-Stokes-Gleichungen sind partielle Differentialgleichungen erster Ordnung in der Zeit und zweiter Ordnung im Ort. Deshalb benötigt man Anfangsbedingungen zur Zeit $t = 0$ und Raundbedingungen für $\Gamma = \pd \Omega$, wenn $\Omega$ ein beschränktes Gebiet ist. Nur entdimensionalisierte Randbedingungen werden betrachtet. 
+\end{bemerkung}
+\begin{bemerkung}
+  Anfangsbedingungen:
+  \begin{align*}
+    u(0, x) = u_{0}(x), \quad \nabla \cdot u_{0} = 0 \text{ in } \Omega
+  \end{align*}
+\end{bemerkung}
+\begin{bemerkung}Dirichlet-Randbedingung, No-Slip-Bedingung, wesentliche Randbedingung.
+
+Oft benutzt man
+\begin{align*}
+  u(t, x) = g(t, x) \quad \text{in } (0, T] \times \Gamma_{dir}
+\end{align*}
+  mit $\Gamma_{dir} \subset \Gamma$. Diese Randbedingungen werden \markdef{Dirichlet-Randbedingungen} genannt. Insbesondere Ein- und Ausströmungen können damit modelliert werden. Im Spezialfall $g(t, x) = 0$ spricht man von \markdef{No-Slip-Randbedingungen}. Sei $n$ eine Einheitsnormale an $x \in \Gamma_{nosl}\subset \Gamma_{dir}$ und seien $(t_{1}, t_{2})$ Einheitstangentialvektoren. Dann kann die No-Slip-Bedingung zerlegt werden in
+  \begin{align*}
+    u(t, x)\cdot n = 0, \quad u(t,x)\cdot t_{1} = 0, \quad u(t, x)\cdot t_{2} = 0
+  \end{align*}
+('keine Durchdringung der Wand', 'No-Slip', 'No-Slip'). Sind auf dem ganzen Rand Dirichlet-Randbedingungen gegeben, dann sind zwei Dinge zu beachten:
+\begin{itemize}
+\item Der Druck ist nur auf einer additiven Konstanten bestimmt, die man festlegen muss, z.B.:
+  \begin{align*}
+&    \int_{\Omega} p(t, x) dx = 0, \quad t \in (0, T]\\
+& u_{t} - \nu \nabla u + (u \cdot \nabla) u + \nabla p = f, \quad \nabla\cdot u = 0
+  \end{align*}
+\item Kompatibilitätsbedingung:
+  \begin{align*}
+    0 = \int_{\Omega} \nabla \cdot u dx = \int_{\Gamma} u \cdot n dS = \int_{\Gamma} g \cdot n dS
+  \end{align*}
+\end{itemize}
+Dirichlet-Randbedingungen sind für Stokes und Navier-Stokes sogenannte \markdef{wesentliche Randbedingungen}, die in die Definition des zu wählenden Funktionenraumes eingehen müssen. 
+\end{bemerkung}
+\begin{bemerkung}Free-Slip-Randbedingungen, Slip mit Reibung
+  
+Die \markdef{Free-Slip-Bedingung} wird angewendet für Ränder ohne Reibung, z.B. freie Oberfläche (Meeresoberfläche). 
+Sie haben die Form
+\begin{align}\label{eq:free_slip}
+&  u \cdot n = g \quad \text{in } (0, T] \times \Gamma_{slip}, \notag \\
+&n^{T}\cdot\sigma \cdot t_{K} = 0 \quad \text{in }(0, T] \times \Gamma_{slip}, 1\leq K \leq d-1
+\end{align}
+Für $g = 0$ gibt es keine Durchdringung der Wand. 'Slip mit linearer Reibung, keine Durchdringung':
+\begin{align} \label{eq:slfr}
+&  u \cdot n = 0\quad \text{in } (0, T] \times \Gamma_{slfr} \subset \Gamma,\notag \\
+& u \cdot t_{n} + \beta^{-1}n^{T}\sigma t_{n} = 0\quad \text{in } (0, T] \times \Gamma_{slfr}, 1 \leq k\leq d-1
+\end{align}
+Dies bedeutet 'keine Durchdringung' und Reibung proportional und entgegengesetzt zur Tangentialgeschwindigkeit. Für $\beta^{-1} \to 0$ erhält man No-Slip-Bedingungen, für $\beta^{-1}\to \infty$ erhält man Free-Slip-Bedingungen. Die Schwierigkeit besteht in der experimentellen Bestimmung von $\beta$. 
+
+Da $n$ und $t_{k}$ orthogonale Vektoren sind, sind \eqref{eq:free_slip} und \eqref{eq:slfr} druck-unabhängig. Man braucht eine additive Konstante für den Druck. 
+\end{bemerkung}
+\begin{bemerkung}
+  Ausströmungs- und 'Do-Nothing'-Randbedingungen, natürliche Randbedingungen
+
+  \begin{align}\label{eq:auff}
+    \sigma \cdot n = 0 \quad \text{in }(0,T] \times \Gamma_{auff} \subset \Gamma 
+  \end{align}
+Mathematisch sind dies sogenannte \markdef{natürliche Randbedingungen}, da die Oberflächenintegrale am Rand verschwinden. \eqref{eq:auff} fixiert den Druck.  
+\end{bemerkung}
+\begin{bemerkung}
+  Bedingungen für unendliche Gebiete und periodische Randbedingungen . 
+
+Der Fall $\Omega = \R^{3}$ wird mathematisch oft betrachtet. Zwei Fälle kommen vor: 
+\enu{\alph}
+\begin{enumerate}
+\item Vorschreiben des Abfalls des Geschwindigkeitsfeldes in Unendlichen für $\nnorm{x}_{2} \to \infty$. 
+\item Periodische Randbedingungen, z.B. Würfel $(0, l)^{d}$ und
+  \begin{align*}
+    u(t, x + l\cdot e_{i}) = u(t, x), \quad \forall(t, x) \in (0, T] \times \Gamma.
+  \end{align*}
+
+\end{enumerate}
+\end{bemerkung}
