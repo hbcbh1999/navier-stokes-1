@@ -981,6 +981,313 @@ Falls $v_{h} \in V_{\div}^{h}$ sein soll, muss gelten
 &=\norm{K_{1}} (2 u_{h}^{1} (m)(q_{h}^{1} q_{h}^{3}) - 2 u_{h}^{2}(m)(2q_{h}^{2} + q_{h}^{1} + q_{h}^{3}))
 \end{align*}
 für beliebige $q_{h}^{1},q_{h}^{2},q_{h}^{3}$. Setze $q_{h}^{1} = 1, q_{h}^{3} = 0$, dann folgt $u_{h}^{2} = 0$. Setze $q_{h}^{3} = 0, q_{h}^{2} = 0$, dann folgt $u_{h}^{1} = u_{h}^{2} = 0$. Schließlich folgt $V_{\div}^{h} = \set 0$.
+%\datum{22. Juni 2015}
+\begin{beispiel}Das $Q_{1}-Q_{0}$-Element
+
+Sei $\Omega = (0, 1)^{2}$ und eine Triangulierung von $\Omega$ gegeben, die aus $n \times n $ Quadraten besteht, wobei $n$ gerade ist.
+\begin{figure}[h!]
+  \centering
+  \begin{tikzpicture}[scale = 2]
+    \draw (0, 0) rectangle (2, 2);
+    \draw (1, 0) -- (1, 2);
+    \draw (0, 1) -- (2, 1);  
+    \foreach \x in {0,...,2}
+    \foreach \y in {0,...,2} 
+       {\pgfmathtruncatemacro{\label}{\x - 5 *  \y +21}
+       \fill (\x*1, \y*1) circle (1pt);} 
+    \foreach \x in {1,...,2}
+    \foreach \y in {1,...,2} 
+       {\pgfmathtruncatemacro{\i}{\x-1}
+        \pgfmathtruncatemacro{\j}{\y-1}
+       \draw (\x*1, \y*1) node[below left] {$u_{i+\i, j+\j}$};}
+       \draw (0.5 , 0.5) node {$K_{i-1,j-1}$};
+       \draw (1.5 , 0.5) node {$K_{i,j-1}$};
+       \draw (0.5 , 1.5) node {$K_{i-1,j}$};
+       \draw (1.5 , 1.5) node {$K_{i,j}$};
+
+  \end{tikzpicture}
+  \caption{Triangulierung des Einheitsquadrates}
+  \label{fig:unit_square}
+\end{figure}
+Die Quadrate werden mit $K_{ij}$ bezeichnet, mit $i, j = 1, \dots, N$. Es wird eine Anordnung von links nach rechts und von oben nach unten benutzt. Die FEM-Geschwindigkeit ist stückweise bilinear und sie wird durch ihre Werte an den Knoten der Quadrate $K_{ij}$ bestimmt.
+
+Bezeichne den Wert am unteren linken Knoten des Quadrats $K_{ij}$ durch $v_{ij}^{h}= (u_{ij}^{1, h}, u_{ij}^{2, h})^{T}$. Eine stückweise Funktion wird benutzt, um den Druck zu approximieren. Im Vergleich zum $P_{1}- P_{0}$-Element auf einem entsprechenden Gitter werden die Quadrate hier durch ihre Diegonalen nicht geteilt. Hierbei ist die Anzahl der Geschwindeigkeitsfreiheitsgrade von $P_{1}-P_{0}$ und $Q_{1}-Q_{0}$ dieselbe, da die Zahl der inneren Knoten die gleiche ist. Die Druckfreiheitsgrade sind jedoch nur ungefähr halb so viele (Anzahl der Zahlen -1). Die Inf-Sup-Stabilität von $Q_{1}-Q_{0}$ gegenüber $P_{1} - P_{0}$ ist somit zumindest denkbar. Da der Mittelwert der diskreten FEM-Drücke $0$ ist, folgt
+\begin{align*}
+  0 &= \int_{\Omega} q_{h} dx\\
+  & = \sum_{i, j = 1}^{n} \int_{K_{ij}} q_{ij}^{h} dx\\
+  &= h^{2} \sum_{i, j = 1}^{n} q_{ij}^{h},
+\end{align*}
+wobei $h$ die Seitenlänge der $K_{ij}$ ist. Wir erhalten
+\begin{align*}
+  \sum_{i, j = 0}^{n} q_{ij}^{h} = 0.
+\end{align*}
+Wir betrachten nun eine einzelne Gitterzelle $K_{ij}$: Partielle Integration ergibt
+\begin{align*}
+  \int_{K_{ij}} \nabla\cdot q_{ij}^{h} dx  &= q_{ij}^{h} \int_{K_{ij}} \nabla\cdot v_{h} dx\\
+  &= q_{ij}^{h} \int_{\partial K_{ij}} v_{h}\cdot n_{\partial K_{ij}} dx,
+\end{align*}
+wobei $v_{h} = (u^{1, h}, u^{2, h})^{T}$ und $n_{\partial K_{ij}}$ die äußere Einheitnormale bezeichnet. Die Einheitsnormalen sind $\partial K_{ij} \pm e_{i}$, $i = 1, 2$. Das Kantenintegral über die Restriktion von $Q_{1}$ auf eine Kante ist eine lineare Funktion, die mit der Trapezregel exakt berechnet werden können. Man erhält zum Beispiel für die unterste Kante
+\begin{align*}
+  \int_{E} v_{h}\cdot n_{\partial K_{ij}} dx = -\int_{E} v_{h} e_{2} dx =  - \int_{E} u^{2, h}(x) dx = -\frac h 2 (u_{i, j}^{2, h} + u_{i+1, j}^{2, h}). 
+\end{align*}
+Zusammen gilt also
+\begin{align*}
+  \int_{K_{ij}} (\nabla\cdot v_{h})q^{h} dx = \frac h 2 q_{ij}^{h}(- u_{i,j}^{2, h} - u_{i+1, j}^{2, h} + u_{i+1, j}^{1, h}+ u_{i+1, j+1}^{1, h} + u_{i+1, j+1}^{2, h} + u_{1, j+1}^{2, h} - u_{i, j+1}^{1, h} - u_{i, j}^{1, h})
+\end{align*}
+Man betrachtet nun die Beiträge der Integrale, die mit einem inneren Geschwindigkeitsknoten verbunden sind. Man erhält für die Knoten $ij$, $i, j = 2, \dots, n$ die folgenden Beiträge von den vier Gitterzellen, die min dem Knoten adjazent sind:
+\begin{align*}
+  u_{i, j}^{1, h}\frac h 2 (q_{i-1, j-1}^{h} + q_{i-1, j}^{h} - q_{i, j-1}^{h} - q_{i, j}^{h}) + 
+  u_{i, j}^{2, h}\frac h 2 (q_{i-1, j-1}^{h} + q_{i, j-1}^{h} - q_{i-1, j}^{h} - q_{i, j}^{h}).
+\end{align*}
+Die Summe der Integrale über die Gitterzellen ist die gleiche wie die der Gebiete, die mit einem inneren Knoten verbunden sind.
+\begin{align*}
+  0 &= (\nabla\cdot v_{h}, \phi_{h})= \sum_{i, j = 1}^{n} (\nabla\cdot v_{h}, q_{h})_{K_{ij}} \\
+&= \frac h 2 \int_{i, j = 2}^{n}\(  u_{i, j}^{1, h} (q_{i-1, j-1}^{h} + q_{i-1, j}^{h} - q_{i, j-1}^{h} - q_{i, j}^{h}) +   u_{i, j}^{2, h}(q_{i-1, j-1}^{h} + q_{i, j-1}^{h} - q_{i-1, j}^{h} - q_{i, j}^{h})\)
+\end{align*}
+Insbesondere gilt diese Gleichheit für alle diskreten Geschwindigkeiten, in denen nur ein Wert $u_{i, j}^{1, h}$ oder $u_{i, j}^{2, h}$  nicht $0$ ist. Um eine Druckmode zu konstruieren, setzt man ein $u_{i, j}^{1, h}$ und $u_{i, j}^{2, h}$ auf $0$ und erhält
+\begin{align*}
+ & q_{i-1, j-1}^{h} + q_{i-1, j}^{h} - q_{i, j-1}^{h} - q_{i, j}^{h}= 0\\
+ & q_{i-1, j-1}^{h} + q_{i, j-1}^{h} - q_{i-1, j}^{h} - q_{i, j}^{h}= 0
+\end{align*}
+Addieren und Subtrahieren der Bedingungen ergibt
+\begin{align*}
+  &q_{i-1, j-1}^{n} = q_{i, j}^{h},\\
+  &q_{i-1, j}^{n} = q_{i-1, j}^{h}, \quad i, j = 2, \dots, n. 
+\end{align*}
+Damit gibt es auf den ersten Blick zwei Freiheitsgrade, die wählbar sind, um einen Druckmode zu konstruieren. Wenn man zum Beispiel $q_{11} = \alpha \in \R$, $\alpha \neq 0$ setzt, so hat die Hälfte der Gitterzellen den gleichen Wert, nämlich überall, wo die Summe der Indizes $i + j$  von $q_{ij}$ gerade ist. Indem man zum Beispiel $q_{21} \coloneqq \beta$ setzt, erhält man die andere Hälfte der Gitterzellen ihren Druckwert. Hier geht die Annahme ein, dass $n$ gerade gewählt war. Aus $q_{h} \in L_{0}^{2}(\Omega)$ folgt
+\begin{align*}
+  0 = \sum_{i, j = 1, i+j \mod 2 = 0}^{n} \alpha n^{2} + \sum_{i, j = 1, i+1 mod 2 = 1}^{n} \beta n^{2} = \frac {n^{2}} 2 (\alpha + \beta)n^{2} \implies \beta = -\alpha. 
+\end{align*}
+Für alle $\alpha \neq 0$ würde eine Druckmode konstruiert, sodass $(\nabla\cdot v_{h}, v_{h}) = 0$ für alle $v_{h} \in V_{h}$.
+\begin{figure}[h!]
+  \centering
+  \begin{tikzpicture}
+
+    \foreach \y in {0,...,4} 
+    {       \draw (0, \y) -- (4, \y);
+      \draw ( \y, 0) -- (\y, 4);}
+
+    \foreach \y in {1, \dots, 4}
+    \foreach \x in {1, 2}
+%    { \pgfmathifthenelse {\x\y < 0}{\draw (\y - 0.5, \x-0.5) node{1}}{\draw (\y - 0.5, \x-0.5) node{1}};}
+{}
+  \end{tikzpicture}
+  \caption{Schachbrett-Instabilität}
+  \label{fig:schachbrett-2}
+\end{figure}
+\end{beispiel}
+\begin{bemerkung*}
+  \begin{enumerate}
+  \item Konstruiert man fpr das $Q_{1}- Q_{0}$-Element einen rdigierten Druckraum $\tilde Q_{h} = \set{\rho_{h}}^{\perp}$, dann hat $Q_{1}- \tilde Q_{h}$-Element eine Inf-Sup-Konstante $\beta_{h}= \cO(h)$. 
+\item Durch Entfernen weiterer diskreter Drücke erhält man ein Inf-Sup-stabiles Element zu (i). 
+  \end{enumerate}
+\end{bemerkung*}
+\begin{lemma} Aublin-Nitsche-Lemma
+  
+Es werde $g \in L^{2}(\Omega)$ die eindeutige Lösung $\phi_{g} \in H_{0}^{1}(\Omega)$ zugeordnet, die
+\begin{align*}
+  (\nabla w, \nabla \phi_{g}) = (g, w) 
+\end{align*}
+für alle $w \in H_{0}^{1}(\Omega)$ erfüllt. Sei nun $u  \in H_{0}^{1}(\Omega)$ die Lösung von
+\begin{align*}
+(\nabla u, \nabla v) = (f, v), \quad \forall v \in H_{0}^{1}(\Omega)
+\end{align*}
+mit $f \in L^{2}(\Omega)$ und sei $u_{h} \in V_{h} \subset H_{0}^{1} (\Omega)$ die diskrete Lösung von 
+\begin{align*}
+  (\nabla u_{h}, \nabla v_{h}) = (f, v_{h}), \quad \forall v_{h} \in V_{h}.
+\end{align*}
+Dann gilt
+\begin{align*}
+  \nnorm{u- u_{h}}_{L^{2}} \leq C \cdot \nnorm{\nabla u - \nabla u_{h}}_{L^{2}}\cdot \sup_{0 \neq g \in L^{2}(\Omega)}\set{\frac 1 {\nnorm g_{L^{2}}}\nnorm{inf_{v_{h} \in V_{h}} \nnorm{\nabla \phi_{g} - \nabla v_{h}}_{L^{2}}}}. 
+\end{align*}
+\end{lemma}
+\begin{beweis}
+  Es gilt für $w = u - u_{h} \in L^{2}(\Omega)$:
+  \begin{align*}
+    \nnorm w_{L^{2}} = \sup_{0 \neq g \in L^{2}(\Omega)} \frac{(g, w)}{\nnorm{g}_{L^{2}}}. 
+  \end{align*}
+Aus $(\nabla u - \nabla u_{h}, \nabla \phi_{g}) = (g, w)$ folgt für $w = u - u_{h}$
+\begin{align*}
+  &(\nabla u - \nabla u_{h}, \nabla \phi_{g})= (g, u- u_{h})\\
+  &(\nabla u - \nabla u_{h}, \nabla \phi_{g} - \nabla v_{h}) \leq \nnorm {\nabla u - \nabla u_{h}}_{L^{2}} \cdot \nnorm{\nabla \phi_{g} - \nabla v_{h}}_{L^{2}}\\
+\implies & (g, u - u_{h}) \leq \nnorm{\nabla u - \nabla u_{h}}_{L^{2}} \cdot \inf_{v_{h}\in V_{h}} \nnorm{\nabla \phi_{g} - \nabla v_{h}}_{L^{2}}
+\end{align*}
+Dieses Dualitätsargument liefert nun
+\begin{align*}
+  \nnorm{u - u_{h}}_{L^{2}}&\leq \sup_{0 \neq g \in L^{2}} \frac{g, u - u_{h}}{ \nnorm g_{L^{2}}}\\
+&\leq \nnorm{\nabla u - \nabla u_{h}}_{L^{2}} \cdot \sup_{0 \neq g \in L^{2}} \inf_{v_{h} \in V_{h}} \frac{\nnorm{\nabla \phi_{g} - \nabla v_{h}}_{L^{2}}}{\nnorm g_{L^{2}}}. 
+\end{align*}
+\end{beweis}
+%\datum{24. Juni 2015}
+
+\begin{folgerung}
+  Sei $\Omega$ konvex. Dann $\phi_{g} \in H^{2}(\Omega)$, $\norm{\phi_{g}}_{2}\leq C_{\Omega} \cdot \nnorm{g}_{L^{2}}$
+  \begin{enumerate}
+  \item Sei $u \in H^{1}(\Omega)$. Dann
+    \begin{align*}
+      \nnorm{u-u_{h}}_{L^{2}} &\leq \nnorm{u-u_{h}}_{V} \cdot \sup_{0 \neq g \in L^{2}} \frac {1}{\nnorm{g}_{L^{2}}}\inf_{v_{h} \in V_{h}} \underbrace{\nnorm{\phi_{g} - v_{h}}_{V}}_{= C\cdot h\cdot \nnorm{\phi_{g}}_{2}} \leq C \cdot C_{\Omega}\cdot h\cdot \nnorm{g}_{L^{2}}\\
+&\leq \nnorm{u-u_{h}}_{V}\cdot C \cdot C_{\Omega}\cdot h
+    \end{align*}
+\item Sei $u \in H^{2} (\Omega)$.
+  \begin{align*}
+      \nnorm{u-u_{h}}_{L^{2}} &\leq \underbrace{\nnorm{u-u_{h}}_{V}}_{\leq C\cdot h\cdot \norm 2_{2}}  \cdot C\cdot C_{\Omega} \cdot h \leq C' h^{2} \norm u _{2} \leq C''\cdot h^{2}\cdot \nnorm f_{L^{2}}. 
+  \end{align*}
+\end{enumerate}
+\end{folgerung}
+
+\paragraph{Das Minielement}
+\label{sec:das-minielement}
+
+Typisch für das Minielement ist, dass der Raum $X_{h}$ für die Geschwindigkeit durch die Hinzunahme von Bubblefunktionen genügend groß wird. Seien $\lambda_{1}, \lambda_{2}, \lambda_{3}$ baryzentrische Koordinaten, die im Einheitsdreieck mit $x_{1}, x_{2}$ und $(1- x_{2} - 1_{1})$ zusammenfallen. Dann verschwindet $b(x) = \lambda_{1}\cdot \lambda_{2}\cdot \lambda_{3}$ auf den Seiten des Dreiecks. In 3D auf einem Tetraeder wählt man
+\begin{align*}
+  b(x) = \lambda_{1}\cdot \lambda_{2}\cdot \lambda_{3}\cdot \lambda_{4}. 
+\end{align*}
+Die Hinzunahme einer solchen Bubble zum Geschwindigkeitsraum $P_{1}$ ändert die Stetigkeit nicht. 
+\begin{figure}[h!]
+  \centering
+  \begin{tikzpicture}
+      \draw[->] (0,0) -- coordinate (x axis mid) (1.2,0);
+      \draw[->] (0,0) -- coordinate (y axis mid) (0,1.2);
+      \draw (1, 0) -- (0, 1);
+      \fill (0,0) circle (1pt) node[below left] {$0$};
+      \fill (0,1) circle (1pt) node[below left] {$1$};
+      \fill (1,0) circle (1pt) node[below left] {$1$};
+      \fill (3, 1)  node[below left] {$1- x_{1}-x_{2}$};
+  \end{tikzpicture}
+  \caption{Mini}
+  \label{fig:mini}
+\end{figure}
+$V_{h} = (P_{1} + B_{h})^{2}, \, Q_{h} = P_{1} \cap L_{0}^{2}(\Omega)$ (in 3D: $V_{h}=(P_{1} + B_{h})^{3}$), mit
+\begin{align*}
+  B_{h} &= \set{v \in C_{0}(\bar \Omega): v_{T} \in \Span{\lambda_{1}, \lambda_{2}, \lambda_{3}}, \, T \in \cT_{h}}\\
+  B_{h} &= \set{v \in C_{0}(\bar \Omega): v_{T} \in \Span{\lambda_{1}, \lambda_{2}, \lambda_{3}, \lambda_{4}}, \, T \in \cT_{h}}
+\end{align*}
+(2D/3D). Da der Träger jeder Bubble auf ein einziges Element beschränkt ist, können alle Bubbles durch statische Kondensation eleminiert werden. 
+Das Minielement ist eines der am wenigesten aufwendigen Elemente.
+\begin{satz}
+  Sei $\Omega$ konvex. Dann erfüllt das Minielement dauf quasiuniformen Triangulierungen $\cT_{h}$ die Inf-Sup-Bedinung mit einem $\beta > 0$. 
+\end{satz}
+\begin{beweis}
+Zur Anwendung von Fortins Kriterium definiert man zunächst einen Projektor $\Pi_{h}^{0}: H_{0}^{1}(\Omega) \to P_{1}(\cT_{h})$ über die Lösung der Helmholtzgleichungen
+\begin{align*}
+  (\nabla(\Pi_{h}^{0}v), \nabla w_{h}) + (\Pi_{h}^{0}(v), w_{h}) = (\nabla u, \nabla w_{h}) + (v, w_{h})\quad w_{h}\in P_{1}(\cT_{h}).
+\end{align*}
+Offensichtlich gilt
+\begin{align*}
+  \nnorm{\Pi_{h}^{0}v}_{1} \leq \nnorm v_{1}
+\end{align*}
+für alle $v \in H^{1}(\Omega)$. Das Dualitätsargument auf einem konvexen Gebiet liefert
+\begin{align*}
+  \nnorm{\Pi_{h}^{0}v - v}_{0} &\leq C_{1}\cdot h \cdot \nnorm{\Pi_{h}^{0} v - v}_{1}\\
+&\leq C_{1}\cdot h \cdot\(\nnorm{\Pi_{0}^{h} v}_{1} + \nnorm v _{1}\) \\
+&\leq C_{2}\cdot h \cdot \nnorm v _{1}
+\end{align*}
+(wichtige Eigenschaft!)  
+Weiterhin definieren wir eine lineare Abbildung $\Pi_{h}^{1}: L_{2}(\Omega) \to B_{h}$ mit
+\begin{align*}
+  \int_{T}(\Pi_{h}^{1}v - v)dx = 0, \quad \forall T \in \cT_{h}. 
+\end{align*}
+Die Abbildung besteht aus einem zweistufigen Prozess. Zunächst erfolgt die $L^{2}$-Projektion auf die stückweise konstanten Funktionen. Anschließend werden die konstanten Funktionen durch Bubble-Funktionen mit dem gleichen Integral ersetzt. Dann erhält man $\nnorm{\Pi_{h}^{1} v}_{0} \leq C_{3}\cdot \nnorm v _{0}$. 
+
+\paragraph{$L_{2}$-Stabilität von $\Pi_{h}^{1}v$:}
+\label{sec:l_2-stabilitat-von}
+
+
+
+\begin{enumerate}
+\item Mit $w_{i} > 0$, $\sum_{i = 1}^{N_{0}} w_{i} = 1$. 
+  \begin{align*}
+    \norm{\int_{T} b \, dx} &= \norm T \cdot\norm {\sum_{i = 0}^{N_{0}} w_{i} b(x_{1})}\\
+    &= \norm T \( \min_{1, \dots, N_{0}} b(x_{i})\) \sum_{i = 0}^{N_{0}} w_{i}\\
+    &= C\cdot\norm T
+  \end{align*}
+(2D: $C \geq \frac 1 {10}$, 3D: $C \geq \frac 1 {100}$). Wir setzen jetzt
+\begin{align*}
+  \lambda\int_{T} b \, dx = \int_{T} v \, dx \implies \norm{\int_{T} v dx} \geq \lambda\cdot C\cdot \norm T. \\
+\implies\quad \lambda \leq \frac 1 C \norm T^{-1} \norm{\int_{T} v \, dx}. 
+\end{align*}
+\item
+  \begin{align*}
+    \nnorm{b}_{L^{2}(T)} &= \(\int_{T}(\lambda b )^{2}\)^{\frac 12} = \lambda \(\int_{T}b\cdot b \, dx\)^{2}\\
+&\leq \lambda\cdot\(\nnorm b_{L^{1}(T)} \cdot \nnorm b_{L^{\infty}(T)}  \)^{\frac 12}\\
+&\leq\frac 1 C \norm T^{-1} \nnorm v_{L^{1}(T)}\cdot\(\underbrace{\nnorm b_{L^{1}(T)}}_{\leq \norm T \cdot \nnorm b_{L^{\infty}(T)}} \cdot \nnorm b_{L^{\infty}(T)}  \)^{\frac 12}\\
+&\leq\frac 1 C \norm T^{-1} \nnorm v_{L^{1}(T)}\cdot\ \norm T^{\frac 12} \nnorm b_{L^{\infty}(T)}\\
+&\leq\frac 1 C \norm T^{-1} \norm T^{\frac 12} \nnorm v_{L^{2}(T)}\cdot\ \norm T^{\frac 12} \nnorm b_{L^{\infty}(T)}\\
+&\leq\frac 1 C \cdot\nnorm v_{L^{2}(T)}\cdot \nnorm b_{L^{\infty}}
+  \end{align*}
+(2D: $\nnorm b_{L^{\infty}} = \frac 1 {27}$, 3D: $\nnorm b_{L^{\infty}} = \frac 1 {256}$) Ausflug endet. 
+
+\vspace{5mm}
+Setzt man nun
+\begin{align*}
+  \Pi_{h} v \coloneqq \Pi_{h}^{0}v + \Pi_{h}^{1}(v - \Pi_{h}^{0} v),
+\end{align*}
+so gilt
+\begin{align*}
+  \int_{T}(\Pi_{h}v - v) dx &=   \int_{T}\Pi^{0}_{h}v  dx +  \int_{T}\Pi^{1}_{h}(v - \Pi_{h}^{0} v )dx - \int_{T} v \; dx\\
+&=   \int_{T}\Pi^{0}_{h}v  dx +  \int_{T}(v - \Pi^{0}_{h})dx - \int_{T} v \; dx = 0. 
+\end{align*}
+Die Definition der Abbildung $\Pi_{h}$ wird nun komponentenweise auf vektorwertige Funktionen angewendet. Man beachte, dass die Gradienten der Drücke stückweise konstant sind und die Stetigkeit zu erfolgen hat:
+\begin{align*}
+  \int_{\Omega} \nabla\cdot(v - \Pi_{h}v) q_{h} \, dx &= \int_{\partial \Omega} \underbrace{(v - \Pi_{h}v)}_{= 0}\cdot n q_{h} ds - \int_{\Omega}\underbrace{(v - \Pi_{h} v)}_{= 0}\nabla q_{h}\, dx = 0. 
+\end{align*}
+Weiterhin gilt
+\begin{align*}
+  \nnorm{\Pi_{h}v}_{1} &\leq   \nnorm{\Pi^{0}_{h}v}_{1} +   \nnorm{\Pi_{h}^{1}(v- \Pi_{h}^{0}v)} _{1}\\
+&\leq   \nnorm{v}_{1} +   C_{inv} h^{-1} \nnorm{\Pi_{h}^{1}(v- \Pi_{h}^{0}v)} _{0}\\
+&\leq   \nnorm{v}_{1} +   C_{inv} \cdot C_{3} \cdot h^{-1} \nnorm{v- \Pi_{h}^{0}v} _{0}\\
+&\leq   \nnorm{v}_{1} +   C_{inv} \cdot C_{3} \cdot h^{-1}\cdot C_{2}\cdot h \nnorm{v} _{0}\\
+&\leq  (1+  C_{inv} \cdot C_{3} \cdot C_{2}) \nnorm{v} _{1}
+\end{align*}
+\end{enumerate}
+Damit ist die Beschränktheit von $\Pi_{h}v$ bewiesen und das Minielement ist auf quasi-uniformen Gebieten und konvexen Gebieten $\Omega$ Inf-Sup-stabil. 
+\end{beweis}
+
+\paragraph{Minielement $P_1^+-P_1$}
+Fehler beträgt bei $u \in H^{2}, p \in H^{1}$ oder $p \in H^{2}$ $\cO(h)$ ('ziemlich verwandt mit $P_{1}-P_{1}$-Stabilisierung'). Es gilt
+\begin{align*}
+  \nnorm{u -u_{h}}_{V} &\leq 2(1 + C_{F}) \inf_{v_{h} \in V_{h}} \nnorm{u-u_{h}} + \frac 1 \nu \inf_{q_{h}\in Q} \nnorm{p-q_{h}}_{Q}\\
+&  \leq 2(1 + C_{F})C_{u} \cdot h\cdot \norm u_{2} + \frac 1 \nu C_{p}\norm p_{1}\cdot h\\
+&  \leq 2(1 + C_{F})C_{u} \cdot h\cdot \norm u_{2} + \frac 1 \nu C'_{p}\norm p_{2}\cdot h^{2}
+\end{align*}
+\begin{bemerkung} Der Boland-Nealandes-Ansatz zur Überprüfung der Inf-Sup-Bedingung. 
+
+Es wird weiter die Konstruktion von FEM-Räumen ($V_{h}, Q_{h}$) betrachtet, die uniform eine Inf-Sup-Bedingung erfüllen. Die Idee von Boland und Nicolaidas besteht darin, das Problem in lokale Inf-Sup-Bedingungen und eine globale, einfachere Inf-Sup-Bedingung zu zerlegen. Sei $\Omega$ dazu partitioniert in eine endliche Zahl $R$ von disjunkten, Lipschitzstetigen, offenen Teilmengen $\Omega_{r}$ mit Rand $\Gamma_{r}$:
+\begin{align*}
+  \bar \Omega = \bigcup_{r = 1}^{R} \bar \Omega_{r}. 
+\end{align*}
+Sei weiter $Q_{h}^{+} = Q_{L} \oplus \R$. Für $1 \leq r \leq R$ setzt man
+\begin{align*}
+  \begin{cases}
+    V_{h}(\Omega_{r}) = \set{v \in V_{h}: \, v_{h} = 0 \text{ in } \Omega\setminus \Omega_{r}}\\
+    Q_{h}^{+}(\Omega_{r}) = \set{q_{h}|_{\Omega_{r}}: \, q_{h} \in Q_{h}^{+}}\\
+    Q_{h}(\Omega_{r}) = Q_{h}^{+}(\Omega_{r})\cap L_{0}^{2}(\Omega_{r}). 
+  \end{cases}
+\end{align*}
+Weiter sei $\bar M_{h}= \set{q_{h} \in L_{0}^{2}(\Omega): q_{h}|_{\Omega_{r}} \text{ ist konstant }, 1 \leq r \leq R}$. Man beachte, dass alle Funktionen aus $V_{h}(\Omega_{r})$ zu $H_{0}^{1}(\Omega_{r})^{d}$ gehören. Nun wird folgende Annahme eingeführt, die auf uniform gültigen lokalen Inf-Sup-Bedingungen bezüglich dieser Partition beruht. 
+\end{bemerkung}
+\begin{voraussetzung}\label{2.28}
+  Es existiere eine Konstante $\lambda^{*} > 0$, die unabhängig von $h$ und $v$ ist, so dass gilt:
+  \begin{align*}
+    \sup_{v_{h}\in V_{h}(\Omega_{r})} \frac{\int q_{h} (\nabla\cdot v_{h}) dx}{ \nnorm{v_{h}}_{1, \Omega_{r}}} \geq \lambda^{*} \nnorm{q_{h}}_{0, \Omega_{r}}\qquad \forall q_{h} \in Q_{h}(\Omega_{r}), \, 1 \leq r\leq R
+  \end{align*}
+\end{voraussetzung}
+\begin{satz}
+  Wenn die Räume $(V_{h}, Q_{h})$ die Voraussetzung \ref{2.28} erfüllen und wenn es einen Teilraum $\bar V_{h}$ von $V_{h}$ gibt, sodass $(\bar V_{h}, \bar M_{h})$ die Inf-Sup-Bedingung mit einer Konstanten $\bar \beta$ unabhängig von $h$ erfüllt, dann erfüllt $(V_{h}, Q_{h})$ ebenfalls die Inf-Sup-Bedingung mit einer Konstanten $\beta^{*}$ unabhängig von $h$. 
+\end{satz}
+\begin{beweis}
+  Jede Funktion $q_{h} \in Q_{h}$ kann dargestellt werden als 
+  \begin{align*}
+    q_{h} = \tilde q_{h} + \bar q_{h}
+  \end{align*}
+mit $\bar q_{h}|_{\Omega_{r}} = \frac 1 {\norm{\Omega_{r}}} \int_{\Omega_{r}} q_{h} dx$, $1 \leq r\leq R$, und $\tilde q_{h} = \tilde q_{h}|_{\Omega_{r}} \in Q_{h}^{+}(\Omega_{r})$. Es gilt $\bar q_{h} \in \bar M_{h}$ und die Orthogonalität der Zerlegung impliziert
+\begin{align*}
+  \nnorm {q_{h}}_{0}^{2} = \nnorm {\tilde q_{h}}_{0}^{2} + \nnorm{\bar q_{h}}^{2}. 
+\end{align*}
+
+\end{beweis}
+
+
 %%% Local Variables: 
 %%% mode: latex
 %%% TeX-master: "vorlesung"
