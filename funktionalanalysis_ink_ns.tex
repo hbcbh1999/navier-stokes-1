@@ -1266,14 +1266,14 @@ Sei weiter $Q_{h}^{+} = Q_{L} \oplus \R$. Für $1 \leq r \leq R$ setzt man
 \end{align*}
 Weiter sei $\bar M_{h}= \set{q_{h} \in L_{0}^{2}(\Omega): q_{h}|_{\Omega_{r}} \text{ ist konstant }, 1 \leq r \leq R}$. Man beachte, dass alle Funktionen aus $V_{h}(\Omega_{r})$ zu $H_{0}^{1}(\Omega_{r})^{d}$ gehören. Nun wird folgende Annahme eingeführt, die auf uniform gültigen lokalen Inf-Sup-Bedingungen bezüglich dieser Partition beruht. 
 \end{bemerkung}
-\begin{voraussetzung}\label{2.28}
+\begin{voraussetzung}\label{2.46}
   Es existiere eine Konstante $\lambda^{*} > 0$, die unabhängig von $h$ und $v$ ist, so dass gilt:
   \begin{align*}
     \sup_{v_{h}\in V_{h}(\Omega_{r})} \frac{\int q_{h} (\nabla\cdot v_{h}) dx}{ \nnorm{v_{h}}_{1, \Omega_{r}}} \geq \lambda^{*} \nnorm{q_{h}}_{0, \Omega_{r}}\qquad \forall q_{h} \in Q_{h}(\Omega_{r}), \, 1 \leq r\leq R
   \end{align*}
 \end{voraussetzung}
 \begin{satz}
-  Wenn die Räume $(V_{h}, Q_{h})$ die Voraussetzung \ref{2.28} erfüllen und wenn es einen Teilraum $\bar V_{h}$ von $V_{h}$ gibt, sodass $(\bar V_{h}, \bar M_{h})$ die Inf-Sup-Bedingung mit einer Konstanten $\bar \beta$ unabhängig von $h$ erfüllt, dann erfüllt $(V_{h}, Q_{h})$ ebenfalls die Inf-Sup-Bedingung mit einer Konstanten $\beta^{*}$ unabhängig von $h$. 
+  Wenn die Räume $(V_{h}, Q_{h})$ die Voraussetzung \ref{2.46} erfüllen und wenn es einen Teilraum $\bar V_{h}$ von $V_{h}$ gibt, sodass $(\bar V_{h}, \bar M_{h})$ die Inf-Sup-Bedingung mit einer Konstanten $\bar \beta$ unabhängig von $h$ erfüllt, dann erfüllt $(V_{h}, Q_{h})$ ebenfalls die Inf-Sup-Bedingung mit einer Konstanten $\beta^{*}$ unabhängig von $h$. 
 \end{satz}
 \begin{beweis}
   Jede Funktion $q_{h} \in Q_{h}$ kann dargestellt werden als 
@@ -1284,7 +1284,62 @@ mit $\bar q_{h}|_{\Omega_{r}} = \frac 1 {\norm{\Omega_{r}}} \int_{\Omega_{r}} q_
 \begin{align*}
   \nnorm {q_{h}}_{0}^{2} = \nnorm {\tilde q_{h}}_{0}^{2} + \nnorm{\bar q_{h}}^{2}. 
 \end{align*}
+Entsprechend der Hypothese \ref{2.46} existiert ein $\tilde v_{h}\in V_{h} (\Omega_{r})$ mit
+\begin{align*}
+  \int_{\Omega_{r}} \tilde q_{r} (\nabla\cdot \tilde v_{r}) dx = \nnorm {\tilde q_{r}}_{0, \Omega}^{2}, \quad \norm{\tilde v_{r}}_{1, \Omega_{r}} \leq \frac 1 {\lambda^{*}}\nnorm{\tilde q_{r}}_{0, \Omega_{r}}
+\end{align*}
+Weiter erfüllt das Paar $(\bar V_h, \bar M_{h})$ eine Inf-Sup-Bedingung und es exisitert ein $\bar v_{h} \in \bar V_{h}$ mit
+\begin{align*}
+    \int_{\Omega} \bar q_{h} (\nabla\cdot \bar v_{h}) dx = \nnorm {\bar q_{h}}_{0, \Omega}^{2}, \quad \norm{\bar v_{h}}_{V} \leq \frac 1 {\lambda^{*}}\nnorm{\bar q_{h}}_{0, \Omega}
+\end{align*} 
+Nun sei $\tilde v_{h}$ die Funktion von $V_{h}$, für die gilt $\tilde v_{h}|_{\Omega_{r}} = \tilde v_{r}$. Es wird nun ein Ansatz gemacht, um zum Druck $q_{h} \in Q_{h}$ ein passendes $v_{h} \in V_{h}$ für eine uniforme Inf-Sup-Bedingung zu finden.
+\begin{align*}
+  v_{h}= \tilde v_{h} \alpha \bar v_{h}
+\end{align*}
+für ein zu findendes $\alpha  > 0$. Es gilt nun
+\begin{align*}
+  (q_{h}, \nabla\cdot v_{h}) = (\tilde q_{h}, \nabla\cdot \tilde v_{h}) + (\bar q_{h}, \nabla\cdot \tilde v_{h}) +  \alpha(\tilde q_{h}, \nabla\cdot \bar v_{h}) +  \alpha(\bar q_{h}, \nabla\cdot \bar v_{h}) 
+\end{align*}
+\begin{itemize}
+\item   $(\bar q_{h}, \nabla\cdot \tilde v_{h})  = \int_{\Omega} \bar q_{h}\nabla\cdot \tilde v_{h}dx = \sum_{r = 1}^{R} \int_{\Omega_{r}} \bar q_{r} \nabla\cdot \tilde v_{r} dx = \sum_{r = 1}^{R} \bar q_{h}|_{\Omega_{r}} \int_{\Omega_{r}} \nabla\cdot \tilde v_{h} dx = 0$, denn $\int_{\partial \Omega_{r}} \tilde v_{h}\cdot n \,ds = 0$
+\item $(\tilde q_{h}, \nabla\cdot \bar v_{h}) = \nnorm{\tilde q_h}_0^2$
+\item $(\bar q_{h}, \nabla\cdot \bar v_{h})  = \nnorm {\bar v_{h}}_{0}^{2}$
+\item $(\tilde q_{h}, \nabla\cdot \bar v_{h})\leq \nnorm{\tilde q_{h}}_{0, \Omega} \cdot \nnorm{\nabla\cdot \bar v_{h}}_{0, \Omega}\leq  \nnorm{\tilde q_{h}}_{0} \cdot \nnorm{\nabla \bar v_{h}}_{0}\leq \frac 1 {\bar \beta} \nnorm{\tilde q_{h}}_{0} \cdot \nnorm{\bar q_{h}}_{0}$. 
+\end{itemize}
+\begin{align*}
+  \implies \quad (q_{h}, \nabla\cdot v_{h}) &\geq \nnorm{\tilde q_{h}}_{0}^{2} - \alpha \frac 1 {\bar \beta} \nnorm{\tilde q_{h}}_{0}\cdot \nnorm[\bar q_{h}}_{0} + \alpha \nnorm{\bar q_{h}}_{0}^{2}\\
+&\geq \nnorm{\tilde q_{h}}_{0}^{2} - \alpha \frac 1 {\bar \beta} \(\eps \nnorm{\tilde q_{h}}^{2}_{0} + \frac 1 {4 \eps} \nnorm{\bar q_{h}}^{2}_{0}\) + \alpha \nnorm{\bar q_{h}}_{0}^{2} \\
+&\geq (1 - \frac {\alpha \eps}{\bar \beta})\nnorm{\tilde q_{h}}_{0}^{2} + \alpha(1 -  \frac 1 {4 \eps \bar \beta}) \nnorm{\bar q_{h}}_{0}^{2}. 
+\end{align*}
+Setze $\eps \coloneqq \frac {\bar \beta}{ \alpha \eps}$:
+\begin{align*}
+  &\geq \frac  1 2 \nnorm{\tilde q_{h}}_{0}^{2} + \alpha(1 -  \frac \alpha {2 \bar \beta^{2}}) \nnorm{\bar q_{h}}_{0}^{2}. 
+\end{align*}
+Mit der Wahl $\alpha = \bar \beta^{2}$ gilt weiter (da $\bar \beta < 1$) 
+\begin{align*}
+  &\geq \frac  1 2 \nnorm{\tilde q_{h}}_{0}^{2} + \frac {\beta^{2}} 2 \nnorm{\bar q_{h}}_{0}^{2}\\
+  &\geq \frac  {\bar \beta^{2}} 2 \(\nnorm{\tilde q_{h}}_{0}^{2} + \nnorm{\bar q_{h}}_{0}^{2}\)\\
+  & =  \frac  {\bar \beta^{2}} 2 \nnorm{ q_{h}}_{0}^{2}. 
+\end{align*}
+Weiter gilt
+\begin{align*}
+  \nnorm{v_{h}}_{V} &\leq \nnorm{\tilde v_{h}}_{V} + \alpha \nnorm{\bar v_{h}}_{V}\\
+  &\leq \frac 1 {\lambda^{*}} \nnorm{\tilde q_{h}}_{0} + \frac \alpha {\bar \beta} \nnorm{\bar q_{h}}_{0}\\
+  &\leq \frac 1 {\lambda^{*}} \nnorm{\tilde q_{h}}_{0} + \bar \beta \nnorm{\bar q_{h}}_{0}\\
+  &\leq \(\frac 1 {(\lambda^{*})^{2}} \nnorm{\tilde q_{h}}^{2}_{0} + 2\bar \beta^{2} \nnorm{\bar q_{h}}^{2}_{0}\)^{1/2}\\
+  &\leq \sqrt 2 \max \set{\frac 1 {\lambda^{*}}, \bar \beta}\nnorm{ q_{h}}_{0}. 
+\implies \quad & \frac {(q_{h}, \nabla\cdot v_{h})}{ \nnorm{v_{h}}_{V}} \geq \frac{\frac {\bar \beta ^{2}}2 \nnorm {q_{h}}_{0}^{2}}{ \sqrt 2 \max\set{\frac 1 {\lambda^{*}}, \bar \beta}\nnorm{ q_{h}}_{0}}\\
+\geq \fraq 1 {2 \sqrt 2} \min (\bar \beta^{2} \lambda^{*}, \bar \beta)\nnorm{q_{h}}_{0}\\
+\geq \beta^{*}\nnorm{q_{h}}_{0}, 
+\end{align*}
+wobei $\beta^{*}$ nur von $\bar \beta$ und $\lambda^{*}$ abhängt. 
 
+
+$[a, b \geq 0, a + b \leq \sqrt{2(a^{2} + b^{2})}]$, 
+Youngs Ungleichung ($a, b \geq 0$):
+\begin{align*}
+  a\cdot b \leq \eps a^{2} + \frac 1{4 \eps}b^{2} &\iff \(\sqrt  \eps a - \frac 1 {2 \sqrt \eps} b\)^{2} \geq 0
+\end{align*}
 \end{beweis}
 
 
