@@ -1307,7 +1307,7 @@ für ein zu findendes $\alpha  > 0$. Es gilt nun
 \item $(\tilde q_{h}, \nabla\cdot \bar v_{h})\leq \nnorm{\tilde q_{h}}_{0, \Omega} \cdot \nnorm{\nabla\cdot \bar v_{h}}_{0, \Omega}\leq  \nnorm{\tilde q_{h}}_{0} \cdot \nnorm{\nabla \bar v_{h}}_{0}\leq \frac 1 {\bar \beta} \nnorm{\tilde q_{h}}_{0} \cdot \nnorm{\bar q_{h}}_{0}$. 
 \end{itemize}
 \begin{align*}
-  \implies \quad (q_{h}, \nabla\cdot v_{h}) &\geq \nnorm{\tilde q_{h}}_{0}^{2} - \alpha \frac 1 {\bar \beta} \nnorm{\tilde q_{h}}_{0}\cdot \nnorm[\bar q_{h}}_{0} + \alpha \nnorm{\bar q_{h}}_{0}^{2}\\
+  \implies \quad (q_{h}, \nabla\cdot v_{h}) &\geq \nnorm{\tilde q_{h}}_{0}^{2} - \alpha \frac 1 {\bar \beta} \nnorm{\tilde q_{h}}_{0}\cdot \nnorm{\bar q_{h}}_{0} + \alpha \nnorm{\bar q_{h}}_{0}^{2}\\
 &\geq \nnorm{\tilde q_{h}}_{0}^{2} - \alpha \frac 1 {\bar \beta} \(\eps \nnorm{\tilde q_{h}}^{2}_{0} + \frac 1 {4 \eps} \nnorm{\bar q_{h}}^{2}_{0}\) + \alpha \nnorm{\bar q_{h}}_{0}^{2} \\
 &\geq (1 - \frac {\alpha \eps}{\bar \beta})\nnorm{\tilde q_{h}}_{0}^{2} + \alpha(1 -  \frac 1 {4 \eps \bar \beta}) \nnorm{\bar q_{h}}_{0}^{2}. 
 \end{align*}
@@ -1329,7 +1329,7 @@ Weiter gilt
   &\leq \(\frac 1 {(\lambda^{*})^{2}} \nnorm{\tilde q_{h}}^{2}_{0} + 2\bar \beta^{2} \nnorm{\bar q_{h}}^{2}_{0}\)^{1/2}\\
   &\leq \sqrt 2 \max \set{\frac 1 {\lambda^{*}}, \bar \beta}\nnorm{ q_{h}}_{0}. 
 \implies \quad & \frac {(q_{h}, \nabla\cdot v_{h})}{ \nnorm{v_{h}}_{V}} \geq \frac{\frac {\bar \beta ^{2}}2 \nnorm {q_{h}}_{0}^{2}}{ \sqrt 2 \max\set{\frac 1 {\lambda^{*}}, \bar \beta}\nnorm{ q_{h}}_{0}}\\
-\geq \fraq 1 {2 \sqrt 2} \min (\bar \beta^{2} \lambda^{*}, \bar \beta)\nnorm{q_{h}}_{0}\\
+\geq \frac 1 {2 \sqrt 2} \min (\bar \beta^{2} \lambda^{*}, \bar \beta)\nnorm{q_{h}}_{0}\\
 \geq \beta^{*}\nnorm{q_{h}}_{0}, 
 \end{align*}
 wobei $\beta^{*}$ nur von $\bar \beta$ und $\lambda^{*}$ abhängt. 
@@ -1342,7 +1342,85 @@ Youngs Ungleichung ($a, b \geq 0$):
 \end{align*}
 \end{beweis}
 
+\begin{bemerkung}\label{2-48}
+  Eine Möglichkeit, Fortin-Operatoren zu konstruieren: Manchmal ist es möglich, einen Fortin-Operator mit Hilfe zweier linearer Operatoren $\Pi_{h}^{1}, \Pi_{h}^{2} \in L(V, V_{h})$ zu konstruieren. Wir nehmen an, dass gilt:
+  \begin{enumerate}
+  \item $\nnorm{\Pi_{h}^{1} v}_{V} \leq C_{1} \nnorm v_{V}$ für alle $v \in V$, 
+  \item $\nnorm{\Pi_{h}^{2}(I-\Pi_{h}^{1}) v}_{V} \leq C_{2} \nnorm v_{V}$ für alle $v \in V$, 
+  \item $(\nabla\cdot(v-\Pi_{h}^{2}v), q_{h}) = 0$ für alle $v \in V$, $q_{h} \in Q_{h}$, 
+  \end{enumerate}
+wobei $C_{1}$, $C_{2}$ unabhängig von $h$ sind. Dann kann man einen Fortin-Interpolator konstruieren durch
+\begin{align*}
+  \Pi_{h}^{F} \in \cL(V, V_{h}): \, v \mapsto \Pi_{h}^{1} v + \Pi_{h}^{2}(v - \Pi_{h}^{1} v).
+\end{align*}
+\end{bemerkung}
+\begin{beweis}
+  Fortin-Eigenschaft:
+  \begin{align*}
+    (\nabla\cdot(\Pi_{h}^{F}v), q_{h}) &= (\nabla\cdot(\Pi_{h}^{1}(v - \Pi_{h}^{1}v)),q_{h})\\
+&= (\underbrace{\nabla\cdot(\Pi_{h}^{1}(v - \Pi_{h}^{2}\Pi_{h}^{1}v))}_{= 0},q_{h}) + (\nabla\cdot \Pi_{h}^{2}v, q_{h})\\
+&= (\nabla\cdot \Pi_{h}^{2}v, q_{h}) = (\nabla\cdot v, q_{h}). 
+  \end{align*}
+Die Beschränktheit von $\Pi_{h}^{F}$ folgt aus
+\begin{align*}
+  \nnorm{\Pi_{h}^{F}v}_{V} &\leq \nnorm{\Pi_{h}^{1}v}_{V} + \nnorm{\Pi_{h}^{2}(v - \Pi_{h}^{1} v)}_{V} \\
+ &\leq C_{1}\cdot \nnorm{v}_{V} + C_{2}\nnorm{v}_{V} = (C_{1} + C_{2})\nnorm v_{V}.
+\end{align*}
+\end{beweis}
+\begin{bemerkung}
+  Oft wird der Clement-Operator $I_{h}^{Cle}$ benutzt, um Fortin-Operatoren zu konstruieren. Er spielt dann die Rolle von $\Pi_{h}^{1}$. Die Bedingung an $\Pi_{h}^{2}$ kann dann ersetzt werden durch 
+  \begin{align*}
+    \nnorm{\Pi_{h}^{2} v}_{H^{1}(K)} \leq C \cdot (h_{k}^{-1} \nnorm v_{L^{2}(\omega_{K})} + \norm v _{H^{1}(\omega_{K})}) 
+  \end{align*}
+für alle $K \in \cT_{h}$ und alle $v \in V$, wobei $C$ nicht von $h_{K}$ abhängt. 
+\end{bemerkung}
 
+\paragraph{Einschub: Clement-Operator}
+\label{sec:einsch-clem-oper}
+
+$I_{h}^{Cle}: L^{1}(\Omega) \to V_{h}$
+\begin{align*}
+  \nnorm{v - I_{h}^{Cle}}_{L^{2}} \leq C\cdot h\cdot \norm v_{1}, \\
+  \nnorm{v - I_{h}^{Cle}}_{V} \leq C\cdot h\cdot \norm v_{2}. 
+\end{align*}
+Sei $v \in H^{1}$:
+\begin{align*}
+  \nnorm{I_{h}^{Cle}}_{V} \leq C\cdot \nnorm v_{V}. 
+\end{align*}
+Kontrollgebiet von Basisfunktionen zu einem Element $i$ ('patch') $\omega_{i}$:
+\begin{align*}
+  \int_{\omega_{i}}(v - I(v))\cdot p \, dx = 0 \qquad \forall p \in P^{K}. 
+\end{align*}
+Ende Einschub. 
+
+Betrachte dazu eine quasi-uniforme Triangulierung $\cT_{h}$, dann ergibt die obige Konstruktion einen Fortin-Interpolator.
+\begin{beweis} Es ist nur noch die Beschränktheit des Fortin-Interpolators zu zeigen, der Rest folgt analog wie in Bemerkung \ref{2-48}. Durch die Quasi-Uniformität der Triangulierung folgt, dass es für jedes $K$ eine maximale Zahl von Gitterzellen in jedem $\omega_{K}$ gibt, die unabhängig von der Triangulierung ist. Weiter kann der Durchmesser von $\omega_{h}$ abgeschätzt werden durch $C\cdot h_{K}$ von einer Konstante unabhängig von $\cT_{h}$. Man erhält:
+  \begin{align*}
+    \nnorm{\Pi_{h}^{F}}_{V}^{2} &= \norm{\Pi_{h}^{F} v}_{H^{1}(\Omega)}^{2}\\
+    &\leq 2 \norm{I_{h}^{Cle} v}_{H^{1}(\Omega)}^{2} + 2\norm{\Pi_{h}^{2}(v-I_{h}^{Cle} v)}_{H^{1}(\Omega)}^{2}\\
+    &\leq C\cdot \(\norm{I_{h}^{Cle} v -v}_{H^{1}(\Omega)}^{2} + \norm{v}_{H^{1}(\Omega)}^{2}\) + 2 \cdot \sum_{K \in \cT_{h}} \norm{\Pi_{h}^{2}(v - I_{h}^{Cle})}_{H^{1}(\Omega)}^{2}\\
+    &\leq C\cdot \(\sum_{K} \norm{I_{h}^{Cle} v -v}_{H^{1}(K)}^{2} + \norm{v}_{H^{1}(\Omega)}^{2}\) +  C \cdot \(\sum_{K} (h_{K}^{-2} \nnorm{v - I_{h}^{Cle}v}_{L^{2}(K)}^{2} + \norm{v - I_{h}^{Cle} v}_{H^{1}(\Omega)}^{2}\)\\
+    &\leq C\cdot\(\norm{v}_{H^{1}(\Omega)}^{2} + \sum_{K} \norm{v}_{H^{1}(\omega_{K})}^{2} + \norm{v}_{H^{1}(\omega_{K})}^{2} + \norm{v}_{H^{1}(\omega_{K})}^{2}\)\\
+    &\leq C\cdot\(\norm{\nabla v}_{L^{2}(\Omega)}^{2}\) \\
+    & = C \nnorm v_{V}^{2}
+  \end{align*}
+\end{beweis}
+\begin{lemma}\label{2-50}
+  Diskrete Inf-Sup-Bedingung für das Bernardi-Rougel-Element $P_{1}^{BR} - P_{0}$ erster Ordnung
+
+Bei der Konstruktion des Bernardi-Rougel-Elements erster Ordnung wird der Raum $P_{1}(K)$ durch echt-vektorwärtige Bobble-Funktionen angereichert.  (im Dreieck: Zwei Freiheitsgrade an jeder Ecke, und je einen normal zu den Dreieckseiten).
+\begin{align*}
+  v_{bub, i}^{h} = \Pi_{j = 1, j \neq i}^{d + 1} \lambda_{j}n_{i}, \quad i = 1, \dots, d + 1, 
+\end{align*}
+wobei $n_{i}$ die Einheitsnormale ist auf der Seite $E_{i}$, dem dem Knoten $a_{i}$ gegenüber liegt. Die Face-Bubbles sind Polynome. Der lokale FEM-Raum ist gegeben durch $P_{1}^{BR} (K) = P_{1}(K)^{d} + \Span{v_{bub, i}^{h}: \, i = 1, \dots, d + 1}$. Die Freiheitsgrade sind die Werte in den Knoten $v_{h}(a_{i})$, ($d(d + 1)$ Werte) und die Flüsse durch die Seiten $v_{h}\cdot n_{i}, i = 1, \dots, d + 1$ ($d+1$ Werte). Folglich hat ein Element lokal $(d+1)^{2}$ Freiheitsgrade. Der entsprechende globale Ansatzraum für die Geschwindigkeit besteht aus stetigen Funktionen. 
+\end{lemma}
+\begin{beweis}
+  Der Beweis der diskreten Inf-Sup-Bedingung basiert auf der Konstruktion eines Fortin-Interpolators. Man nutzt $\Pi_{h}^{1} = I_{h}^{Cle}$. $\Pi_{h}^{2}$ ist dann definiert durch $\Pi_{h}^{2}v(a_{i}) = I_{h}^{Cle}(a_{i})$,
+  \begin{align*}
+    \int_{E}(v - \Pi_{h}^{2}v)n_{i} \, ds = 0, \qquad i = 1, \dots, d+1. 
+  \end{align*}
+Die Stabilität von $\Pi_{h}^{2}$ und die Divergenzerhaltung findet man in Bernardi-Rougel, 1985. 
+\end{beweis}
 %%% Local Variables: 
 %%% mode: latex
 %%% TeX-master: "vorlesung"
